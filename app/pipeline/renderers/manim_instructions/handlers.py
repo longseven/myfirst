@@ -1,6 +1,7 @@
 """Manim animation instruction handlers.
 
 Each handler generates Python code for a specific animation type.
+使用策略模式，每个处理器独立可测试、可扩展。
 """
 
 from __future__ import annotations
@@ -10,6 +11,13 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 log = logging.getLogger("renderers.manim.instructions")
+
+# 常用 Manim 常量
+DIRECTIONS = {
+    "UP": "UP", "DOWN": "DOWN", "LEFT": "LEFT", "RIGHT": "RIGHT",
+    "UL": "UL", "UR": "UR", "DL": "DL", "DR": "DR",
+    "CENTER": "ORIGIN",
+}
 
 
 class InstructionHandler(ABC):
@@ -35,6 +43,18 @@ class InstructionHandler(ABC):
         """
         ...
 
+    # 公共辅助方法
+    @staticmethod
+    def _format_position(position: str) -> str:
+        """Convert position string to Manim direction."""
+        return DIRECTIONS.get(position.upper(), "ORIGIN")
+
+    @staticmethod
+    def _add_position_code(lines: list[str], var: str, position: str) -> None:
+        """Add position code to lines if position is specified."""
+        if position:
+            lines.append(f'        {var}.to_edge({DIRECTIONS.get(position.upper(), "ORIGIN")})')
+
 
 class WriteTexHandler(InstructionHandler):
     """Handler for write_tex instructions."""
@@ -51,8 +71,7 @@ class WriteTexHandler(InstructionHandler):
         lines = [
             f'        {var} = MathTex(r"{tex}", color={color})',
         ]
-        if position:
-            lines.append(f'        {var}.to_edge({position})')
+        self._add_position_code(lines, var, position)
         lines.extend([
             f'        self.play(Write({var}))',
             f'        self.wait(0.5)',
@@ -237,9 +256,81 @@ class WriteTextHandler(InstructionHandler):
         lines = [
             f'        {var} = Text("{text}", color={color}, font_size=30)',
         ]
-        if position:
-            lines.append(f'        {var}.to_edge({position})')
+        self._add_position_code(lines, var, position)
         lines.append(f'        self.play(Write({var}))')
+        return lines
+
+
+class DrawTreeHandler(InstructionHandler):
+    """Handler for draw_tree instructions (probability tree diagrams)."""
+
+    @property
+    def instruction_type(self) -> str:
+        return "draw_tree"
+
+    def generate(self, anim: dict, var: str, axes_var: Optional[str]) -> list[str]:
+        """Generate probability tree diagram code.
+
+        Args:
+            anim: Dict with 'branches' list, each containing 'from', 'to', 'prob', 'label'
+        """
+        branches = anim.get("branches", [])
+        if not branches:
+            return []
+
+        lines = [f'        {var} = VGroup()']
+        for i, branch in enumerate(branches):
+            start = branch.get("start", [0, 0])
+            end = branch.get("end", [3, 0])
+            prob = branch.get("prob", "")
+            label = branch.get("label", "")
+
+            lines.extend([
+                f'        {var}_b{i} = Line([{start[0]}, {start[1]}, 0], [{end[0]}, {end[1]}, 0], color=WHITE)',
+                f'        {var}.add({var}_b{i})',
+            ])
+            if prob:
+                mid = [(start[0]+end[0])/2, (start[1]+end[1])/2 + 0.3]
+                lines.extend([
+                    f'        {var}_p{i} = MathTex(r"{prob}", font_size=24).move_to([{mid[0]}, {mid[1]}, 0])',
+                    f'        {var}.add({var}_p{i})',
+                ])
+            if label:
+                lines.extend([
+                    f'        {var}_l{i} = Text("{label}", font_size=20).next_to({var}_b{i}, UP)',
+                    f'        {var}.add({var}_l{i})',
+                ])
+        lines.append(f'        self.play(Create({var}))')
+        return lines
+
+
+class DrawAngleHandler(InstructionHandler):
+    """Handler for draw_angle instructions (angle markers in triangles)."""
+
+    @property
+    def instruction_type(self) -> str:
+        return "draw_angle"
+
+    def generate(self, anim: dict, var: str, axes_var: Optional[str]) -> list[str]:
+        """Generate angle marker code.
+
+        Args:
+            anim: Dict with 'vertex', 'ray1', 'ray2', 'label', 'color'
+        """
+        vertex = anim.get("vertex", [0, 0])
+        label = anim.get("label", "")
+        color = anim.get("color", "YELLOW")
+        radius = anim.get("radius", 0.5)
+
+        lines = [
+            f'        {var} = Arc(radius={radius}, angle=PI/4, color={color}).move_arc_center_to({vertex})',
+            f'        self.play(Create({var}))',
+        ]
+        if label:
+            lines.extend([
+                f'        {var}_l = MathTex(r"{label}", font_size=20, color={color}).next_to({var}, UR, buff=0.1)',
+                f'        self.play(Write({var}_l))',
+            ])
         return lines
 
 
@@ -345,6 +436,8 @@ def init_handlers():
         HighlightIntervalHandler(),
         DrawNumberLineHandler(),
         DrawLineHandler(),
+        DrawTreeHandler(),      # 新增：概率树图
+        DrawAngleHandler(),     # 新增：角度标记
     ]
     for handler in handlers:
         register_handler(handler)

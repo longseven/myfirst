@@ -231,24 +231,32 @@ class ManimRenderer(RendererBase):
         scenes = data.get("scenes", [])
         summary = data.get("summary", {})
 
-        # Build step cards HTML
-        steps_html = ""
+        steps_html = self._build_steps_html(scenes)
+        summary_html = self._build_summary_html(summary)
+        video_html = self._build_video_html(video_path)
+
+        return self._assemble_html(title, steps_html, summary_html, video_html)
+
+    def _build_steps_html(self, scenes: list) -> str:
+        """Build HTML for step cards."""
+        steps = []
         for i, scene in enumerate(scenes):
             phase = scene.get("phase") or scene.get("title", "")
             speech = scene.get("speech", "")
             anims = scene.get("instructions") or scene.get("animations", [])
 
             # Extract formulas
-            formulas = []
-            for a in anims:
-                if a.get("type") in ("write_tex", "transform_tex"):
-                    tex = a.get("tex") or a.get("to_tex", "")
-                    if tex:
-                        formulas.append(tex)
+            formulas = [
+                a.get("tex") or a.get("to_tex", "")
+                for a in anims
+                if a.get("type") in ("write_tex", "transform_tex")
+                and (a.get("tex") or a.get("to_tex"))
+            ]
+            formulas_html = "".join(
+                f'<div class="formula">$${f}$$</div>' for f in formulas
+            )
 
-            formulas_html = "".join(f'<div class="formula">$${f}$$</div>' for f in formulas)
-
-            steps_html += f"""
+            steps.append(f"""
             <div class="step-card" data-step="{i}">
                 <div class="step-header">
                     <span class="step-num">Step {i+1}</span>
@@ -256,16 +264,20 @@ class ManimRenderer(RendererBase):
                 </div>
                 <p class="step-speech">{speech}</p>
                 {formulas_html}
-            </div>"""
+            </div>""")
+        return "".join(steps)
 
-        # Summary
-        summary_html = ""
-        if summary:
-            key_formula = summary.get("key_formula", "")
-            method = summary.get("method_name", "")
-            tips = summary.get("tips", [])
-            tips_html = "".join(f"<li>{t}</li>" for t in tips)
-            summary_html = f"""
+    def _build_summary_html(self, summary: dict) -> str:
+        """Build HTML for summary card."""
+        if not summary:
+            return ""
+
+        key_formula = summary.get("key_formula", "")
+        method = summary.get("method_name", "")
+        tips = summary.get("tips", [])
+        tips_html = "".join(f"<li>{t}</li>" for t in tips)
+
+        return f"""
             <div class="summary-card">
                 <h3>总结</h3>
                 <p><strong>方法</strong>: {method}</p>
@@ -273,13 +285,15 @@ class ManimRenderer(RendererBase):
                 <ul>{tips_html}</ul>
             </div>"""
 
-        # Video element
+    def _build_video_html(self, video_path: Optional[str]) -> str:
+        """Build video section HTML."""
         if video_path:
             video_rel = os.path.basename(video_path)
-            video_html = f'<video id="lecture-video" controls><source src="{video_rel}" type="video/mp4"></video>'
-        else:
-            video_html = '<div class="no-video">动画视频暂未生成（需安装 Manim）<br>下方展示解题步骤</div>'
+            return f'<video id="lecture-video" controls><source src="{video_rel}" type="video/mp4"></video>'
+        return '<div class="no-video">动画视频暂未生成（需安装 Manim）<br>下方展示解题步骤</div>'
 
+    def _assemble_html(self, title: str, steps_html: str, summary_html: str, video_html: str) -> str:
+        """Assemble final HTML page."""
         return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>

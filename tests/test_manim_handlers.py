@@ -7,6 +7,8 @@ from app.pipeline.renderers.manim_instructions import (
     WriteTexHandler,
     DrawAxesHandler,
     PlotFunctionHandler,
+    DrawTreeHandler,
+    DrawAngleHandler,
 )
 
 
@@ -104,6 +106,34 @@ class TestInstructionHandlers:
         """Test unknown instruction type returns None."""
         handler = get_handler("unknown_type_xyz")
         assert handler is None
+
+    def test_draw_tree_handler(self):
+        """Test draw_tree instruction generation (probability tree)."""
+        handler = get_handler("draw_tree")
+        assert handler is not None
+
+        anim = {
+            "branches": [
+                {"start": [0, 0], "end": [2, 1], "prob": "1/2", "label": "A"},
+                {"start": [0, 0], "end": [2, -1], "prob": "1/2", "label": "B"},
+            ]
+        }
+        lines = handler.generate(anim, "tree", None)
+
+        assert 'Line(' in lines[1]
+        assert 'MathTex(r"1/2"' in lines[3]
+        assert 'Text("A"' in lines[5]
+
+    def test_draw_angle_handler(self):
+        """Test draw_angle instruction generation (angle marker)."""
+        handler = get_handler("draw_angle")
+        assert handler is not None
+
+        anim = {"vertex": [0, 0], "label": "\\theta", "color": "YELLOW", "radius": 0.5}
+        lines = handler.generate(anim, "angle", None)
+
+        assert 'Arc(radius=0.5' in lines[0]
+        assert 'MathTex(r"\\theta"' in lines[2]
 
 
 class TestManimRendererRefactored:

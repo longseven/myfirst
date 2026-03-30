@@ -15,16 +15,17 @@ from typing import Optional
 
 from . import RendererBase
 from ..llm import call_llm
+from .manim_instructions import init_handlers, get_handler
 
 log = logging.getLogger("renderers.manim")
 
 
 # ============================================================
-# Manim scene_data JSON schema (tells LLM what to output)
+# Manim scene_data JSON schema
 # ============================================================
 
 MANIM_SCHEMA_DOC = r"""
-你必须输出**严格合法的 JSON**，用于生成数学教学动画视频。顶层结构：
+你必须输出**严格合法的 JSON**，用于生成数学教学动画视频。
 
 ```json
 {
@@ -33,80 +34,28 @@ MANIM_SCHEMA_DOC = r"""
   "scenes": [
     {
       "phase": "审题/分析/求解/验证/总结",
-      "speech": "这一步的讲解文本（口语化，30-80字）",
-      "animations": [
-        // 动画指令列表，按顺序执行
-      ]
+      "speech": "这一步的讲解文本（口语化，30-80 字）",
+      "instructions": [...]
     }
   ],
   "summary": {
     "key_formula": "$核心公式$",
     "method_name": "方法名称",
-    "tips": ["注意点1", "注意点2"]
+    "tips": ["注意点 1", "注意点 2"]
   }
 }
 ```
 
-### animations 指令类型：
-
-1. **write_tex** — 书写公式
-   `{"type": "write_tex", "tex": "f(x) = x^3 - 3x + 1", "position": "UP", "color": "BLUE"}`
-
-2. **transform_tex** — 公式变换（上一行 → 下一行）
-   `{"type": "transform_tex", "from_tex": "f'(x) = 3x^2 - 3", "to_tex": "3x^2 - 3 = 0"}`
-
-3. **draw_axes** — 绘制坐标轴
-   `{"type": "draw_axes", "x_range": [-3, 3, 1], "y_range": [-5, 5, 1], "x_label": "x", "y_label": "y"}`
-
-4. **plot_function** — 绘制函数图像
-   `{"type": "plot_function", "expr": "x**3 - 3*x + 1", "x_range": [-2.5, 2.5], "color": "BLUE"}`
-
-5. **mark_point** — 标注点
-   `{"type": "mark_point", "x": 1, "y": -1, "label": "极小值(-1)", "color": "RED"}`
-
-6. **highlight_interval** — 高亮区间
-   `{"type": "highlight_interval", "x_from": -1, "x_to": 1, "label": "递减区间", "color": "YELLOW"}`
-
-7. **draw_line** — 绘制直线/线段
-   `{"type": "draw_line", "start": [0, 0], "end": [3, 4], "color": "GREEN", "label": "AB"}`
-
-8. **draw_triangle** — 绘制三角形
-   `{"type": "draw_triangle", "vertices": [[0,0], [3,0], [1.5, 2.6]], "labels": ["A", "B", "C"], "color": "WHITE"}`
-
-9. **draw_angle** — 标注角
-   `{"type": "draw_angle", "vertex": [0,0], "p1": [3,0], "p2": [1.5, 2.6], "label": "60°", "color": "YELLOW"}`
-
-10. **draw_table** — 绘制表格
-    `{"type": "draw_table", "headers": ["x", "f'(x)", "f(x)"], "rows": [["(-∞,-1)", "+", "↑"], ["(-1,1)", "-", "↓"]], "title": "单调性表"}`
-
-11. **fade_out** — 淡出当前所有元素
-    `{"type": "fade_out"}`
-
-12. **pause** — 暂停
-    `{"type": "pause", "duration": 1.0}`
-
-13. **write_text** — 书写普通文本
-    `{"type": "write_text", "text": "关键结论", "position": "DOWN", "color": "YELLOW"}`
-
-14. **draw_number_line** — 数轴标根法
-    `{"type": "draw_number_line", "range": [-5, 5], "marks": [{"x": -1, "label": "-1"}, {"x": 1, "label": "1"}], "signs": [{"interval": "(-∞,-1)", "sign": "+"}, {"interval": "(-1,1)", "sign": "-"}]}`
-
-15. **draw_tree** — 树形图（概率）
-    `{"type": "draw_tree", "root": "开始", "branches": [{"label": "A(0.6)", "children": [{"label": "B(0.3)"}, {"label": "B̄(0.7)"}]}, {"label": "Ā(0.4)", "children": []}]}`
+### 指令类型：write_tex, transform_tex, draw_axes, plot_function, mark_point,
+           highlight_interval, draw_line, draw_triangle, draw_table, fade_out,
+           pause, write_text, draw_number_line
 
 ### 约束：
 - scenes 必须 8-20 个步骤
-- phase 标签: 审题(1-2步)、分析(1-2步)、求解(4-10步)、验证(0-2步)、总结(1-2步)
-- speech 要口语化，像老师讲课
-- 公式用标准 LaTeX
-- 只基于题目内容生成，不编造
+- speech 要口语化
 - 只输出 JSON
 """
 
-
-# ============================================================
-# System prompt template
-# ============================================================
 
 MANIM_SYSTEM_PROMPT = textwrap.dedent("""\
 你是一位高中数学名师 + 数学动画制作专家。
@@ -137,6 +86,10 @@ class ManimRenderer(RendererBase):
 
     name = "manim"
 
+    def __init__(self):
+        """Initialize renderer with instruction handlers."""
+        init_handlers()
+
     def get_prompt_schema(self) -> str:
         schema_path = os.path.join(
             os.path.dirname(__file__), "..", "..", "..", "data", "prompts", "manim_schema.md"
@@ -155,7 +108,6 @@ class ManimRenderer(RendererBase):
 
     async def parse_llm_output(self, raw: str) -> dict:
         """Extract manim_data JSON from LLM output."""
-        # Reuse the robust JSON extractor
         from ..scene import _extract_json
         data = _extract_json(raw)
 
@@ -163,15 +115,12 @@ class ManimRenderer(RendererBase):
             raise ValueError("LLM 返回的 JSON 缺少 'scenes' 字段")
 
         n_scenes = len(data.get("scenes", []))
-        total_anims = sum(len(s.get("animations", [])) for s in data["scenes"])
-        log.info("Manim 数据: %d 个场景, %d 个动画指令", n_scenes, total_anims)
+        total_anims = sum(len(s.get("instructions") or s.get("animations", [])) for s in data["scenes"])
+        log.info("Manim 数据：%d 个场景，%d 个动画指令", n_scenes, total_anims)
         return data
 
     async def render(self, data: dict, output_dir: str) -> str:
-        """Convert manim_data → Python script → render → HTML player.
-
-        If Manim is not installed, falls back to a static HTML presentation.
-        """
+        """Convert manim_data → Python script → render → HTML player."""
         os.makedirs(output_dir, exist_ok=True)
 
         # Save manim_data.json
@@ -198,7 +147,7 @@ class ManimRenderer(RendererBase):
         with open(html_path, "w", encoding="utf-8") as f:
             f.write(html)
 
-        log.info("Manim 渲染完成: %s", html_path)
+        log.info("Manim 渲染完成：%s", html_path)
         return html_path
 
     def _generate_manim_script(self, data: dict) -> str:
@@ -214,135 +163,40 @@ class ManimRenderer(RendererBase):
             '    def construct(self):',
         ]
 
+        prev_tex_var = None
         for i, scene in enumerate(data.get("scenes", [])):
-            phase = scene.get("phase", "")
+            phase = scene.get("phase") or scene.get("title", "")
             speech = scene.get("speech", "")
-            lines.append(f'')
+            lines.append('')
             lines.append(f'        # === {phase} ===')
             lines.append(f'        # {speech[:60]}...')
 
             axes_var = None
-            last_tex_var = None
+            # Use instructions or animations field
+            anims = scene.get("instructions") or scene.get("animations", [])
 
-            for j, anim in enumerate(scene.get("animations", [])):
+            for j, anim in enumerate(anims):
                 atype = anim.get("type", "")
                 var = f"obj_{i}_{j}"
 
-                if atype == "write_tex":
-                    tex = anim.get("tex", "")
-                    color = anim.get("color", "WHITE")
-                    lines.append(f'        {var} = MathTex(r"{tex}", color={color})')
-                    pos = anim.get("position", "")
-                    if pos:
-                        lines.append(f'        {var}.to_edge({pos})')
-                    lines.append(f'        self.play(Write({var}))')
-                    lines.append(f'        self.wait(0.5)')
-                    last_tex_var = var
+                handler = get_handler(atype)
+                if handler:
+                    code_lines = handler.generate(anim, var, axes_var)
+                    lines.extend(code_lines)
 
-                elif atype == "transform_tex":
-                    from_tex = anim.get("from_tex", "")
-                    to_tex = anim.get("to_tex", "")
-                    if last_tex_var:
-                        lines.append(f'        {var} = MathTex(r"{to_tex}")')
-                        lines.append(f'        self.play(TransformMatchingTex({last_tex_var}, {var}))')
-                        lines.append(f'        self.wait(0.5)')
-                        last_tex_var = var
-                    else:
-                        lines.append(f'        {var} = MathTex(r"{to_tex}")')
-                        lines.append(f'        self.play(Write({var}))')
-                        last_tex_var = var
+                    # Track variables for transforms and axes
+                    if atype == "write_tex":
+                        prev_tex_var = var
+                    elif atype == "draw_axes":
+                        axes_var = var
 
-                elif atype == "draw_axes":
-                    xr = anim.get("x_range", [-5, 5, 1])
-                    yr = anim.get("y_range", [-5, 5, 1])
-                    axes_var = var
-                    lines.append(f'        {var} = Axes(x_range={xr}, y_range={yr}, axis_config={{"include_numbers": True}})')
-                    xl = anim.get("x_label", "x")
-                    yl = anim.get("y_label", "y")
-                    lines.append(f'        {var}_labels = {var}.get_axis_labels(x_label="{xl}", y_label="{yl}")')
-                    lines.append(f'        self.play(Create({var}), Write({var}_labels))')
-
-                elif atype == "plot_function":
-                    expr = anim.get("expr", "x")
-                    color = anim.get("color", "BLUE")
-                    xr = anim.get("x_range", None)
-                    if axes_var:
-                        if xr:
-                            lines.append(f'        {var} = {axes_var}.plot(lambda x: {expr}, x_range={xr}, color={color})')
-                        else:
-                            lines.append(f'        {var} = {axes_var}.plot(lambda x: {expr}, color={color})')
-                        lines.append(f'        self.play(Create({var}))')
-
-                elif atype == "mark_point":
-                    x = anim.get("x", 0)
-                    y = anim.get("y", 0)
-                    label = anim.get("label", "")
-                    color = anim.get("color", "RED")
-                    if axes_var:
-                        lines.append(f'        {var}_dot = Dot({axes_var}.c2p({x}, {y}), color={color})')
-                        lines.append(f'        {var}_label = MathTex(r"{label}", color={color}).next_to({var}_dot, UR, buff=0.1)')
-                        lines.append(f'        self.play(Create({var}_dot), Write({var}_label))')
-
-                elif atype == "draw_triangle":
-                    verts = anim.get("vertices", [[0,0], [3,0], [1.5, 2.6]])
-                    labels = anim.get("labels", ["A", "B", "C"])
-                    color = anim.get("color", "WHITE")
-                    pts = ", ".join([f"[{v[0]}, {v[1]}, 0]" for v in verts])
-                    lines.append(f'        {var} = Polygon({pts}, color={color})')
-                    lines.append(f'        self.play(Create({var}))')
-                    for k, lbl in enumerate(labels):
-                        lines.append(f'        {var}_l{k} = Text("{lbl}", font_size=24).next_to({var}.get_vertices()[{k}], direction=normalize({var}.get_vertices()[{k}]), buff=0.2)')
-                        lines.append(f'        self.play(Write({var}_l{k}), run_time=0.3)')
-
-                elif atype == "draw_table":
-                    headers = anim.get("headers", [])
-                    rows = anim.get("rows", [])
-                    title_str = anim.get("title", "")
-                    h_str = str(headers)
-                    r_str = str(rows)
-                    lines.append(f'        {var} = Table({r_str}, col_labels=[MathTex(h) for h in {h_str}])')
-                    if title_str:
-                        lines.append(f'        {var}_title = Text("{title_str}", font_size=28).next_to({var}, UP)')
-                        lines.append(f'        self.play(Create({var}), Write({var}_title))')
-                    else:
-                        lines.append(f'        self.play(Create({var}))')
-
-                elif atype == "write_text":
-                    text = anim.get("text", "")
-                    color = anim.get("color", "YELLOW")
-                    lines.append(f'        {var} = Text("{text}", color={color}, font_size=30)')
-                    pos = anim.get("position", "DOWN")
-                    if pos:
-                        lines.append(f'        {var}.to_edge({pos})')
-                    lines.append(f'        self.play(Write({var}))')
-
-                elif atype == "fade_out":
-                    lines.append(f'        self.play(*[FadeOut(mob) for mob in self.mobjects])')
-
-                elif atype == "pause":
-                    dur = anim.get("duration", 1.0)
-                    lines.append(f'        self.wait({dur})')
-
-                elif atype == "highlight_interval":
-                    if axes_var:
-                        x_from = anim.get("x_from", 0)
-                        x_to = anim.get("x_to", 1)
-                        color = anim.get("color", "YELLOW")
-                        label = anim.get("label", "")
-                        lines.append(f'        {var} = {axes_var}.get_area({axes_var}.plot(lambda x: 0), x_range=[{x_from}, {x_to}], color={color}, opacity=0.3)')
-                        lines.append(f'        self.play(FadeIn({var}))')
-                        if label:
-                            lines.append(f'        {var}_l = Text("{label}", font_size=20, color={color}).next_to({var}, DOWN)')
-                            lines.append(f'        self.play(Write({var}_l))')
-
-            lines.append(f'        self.wait(1)')
+            lines.append('        self.wait(1)')
 
         lines.append('')
         return '\n'.join(lines)
 
     async def _run_manim(self, script_path: str, output_dir: str) -> Optional[str]:
         """Execute manim render command. Returns video path or None."""
-        # Get the scene class name from the script
         with open(script_path, "r") as f:
             content = f.read()
         m = re.search(r'class (\w+)\(Scene\)', content)
@@ -351,7 +205,7 @@ class ManimRenderer(RendererBase):
         class_name = m.group(1)
 
         cmd = [
-            "manim", "render", "-qm",  # medium quality
+            "manim", "render", "-qm",
             "--media_dir", output_dir,
             script_path, class_name,
         ]
@@ -361,7 +215,7 @@ class ManimRenderer(RendererBase):
 
         if proc.returncode != 0:
             log.error("Manim stderr: %s", proc.stderr[:1000])
-            raise RuntimeError(f"Manim 渲染失败: {proc.stderr[:500]}")
+            raise RuntimeError(f"Manim 渲染失败：{proc.stderr[:500]}")
 
         # Find the output video
         for root, dirs, files in os.walk(output_dir):
@@ -380,12 +234,11 @@ class ManimRenderer(RendererBase):
         # Build step cards HTML
         steps_html = ""
         for i, scene in enumerate(scenes):
-            # Support both old (animations) and new (instructions) field names
             phase = scene.get("phase") or scene.get("title", "")
             speech = scene.get("speech", "")
             anims = scene.get("instructions") or scene.get("animations", [])
 
-            # Extract formulas from animations/instructions
+            # Extract formulas
             formulas = []
             for a in anims:
                 if a.get("type") in ("write_tex", "transform_tex"):

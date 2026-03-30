@@ -1,0 +1,202 @@
+{
+  "scenes": [
+    {
+      "scene_id": 1,
+      "title": "问题引入",
+      "speech": "今天我们来求二次函数 f(x) = 2x² - 8x + 5 的顶点。顶点是二次函数图像的最高点或最低点。",
+      "animations": [
+        {
+          "type": "write_tex",
+          "tex": "f(x) = 2x^2 - 8x + 5",
+          "color": "white",
+          "position": [
+            0,
+            2
+          ]
+        },
+        {
+          "type": "write_text",
+          "text": "求顶点坐标",
+          "color": "yellow",
+          "position": [
+            0,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 2,
+      "title": "画函数图像",
+      "speech": "我们先画出这个二次函数的图像，观察顶点的位置。",
+      "animations": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -1,
+            5
+          ],
+          "y_range": [
+            -5,
+            5
+          ],
+          "position": [
+            0,
+            -1
+          ]
+        },
+        {
+          "type": "plot_function",
+          "expr": "2*x**2 - 8*x + 5",
+          "color": "blue",
+          "x_range": [
+            -0.5,
+            4.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 3,
+      "title": "配方法 - 第一步",
+      "speech": "使用配方法求顶点。先提取二次项系数：f(x) = 2(x² - 4x) + 5",
+      "animations": [
+        {
+          "type": "transform_tex",
+          "from_tex": "f(x) = 2x^2 - 8x + 5",
+          "to_tex": "f(x) = 2(x^2 - 4x) + 5"
+        },
+        {
+          "type": "write_text",
+          "text": "提取二次项系数 2",
+          "color": "green",
+          "position": [
+            0,
+            -2.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 4,
+      "title": "配方法 - 配方",
+      "speech": "对括号内配方：(x² - 4x + 4) - 4 = (x - 2)² - 4",
+      "animations": [
+        {
+          "type": "transform_tex",
+          "from_tex": "f(x) = 2(x^2 - 4x) + 5",
+          "to_tex": "f(x) = 2[(x-2)^2 - 4] + 5"
+        },
+        {
+          "type": "write_text",
+          "text": "加4减4，配成完全平方式",
+          "color": "green",
+          "position": [
+            0,
+            -2.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 5,
+      "title": "配方法 - 化简",
+      "speech": "展开化简：2(x-2)² - 8 + 5 = 2(x-2)² - 3",
+      "animations": [
+        {
+          "type": "transform_tex",
+          "from_tex": "f(x) = 2[(x-2)^2 - 4] + 5",
+          "to_tex": "f(x) = 2(x-2)^2 - 3"
+        }
+      ]
+    },
+    {
+      "scene_id": 6,
+      "title": "顶点公式法",
+      "speech": "也可以直接用顶点公式：x = -b/(2a) = -(-8)/(2×2) = 2，代入求 y 值。",
+      "animations": [
+        {
+          "type": "write_tex",
+          "tex": "x_{vertex} = -\\frac{b}{2a} = -\\frac{-8}{2\\times2} = 2",
+          "color": "white",
+          "position": [
+            0,
+            1.5
+          ]
+        },
+        {
+          "type": "write_tex",
+          "tex": "y_{vertex} = 2(2)^2 - 8(2) + 5 = -3",
+          "color": "white",
+          "position": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 7,
+      "title": "标注顶点",
+      "speech": "在图像上标注顶点 (2, -3)。",
+      "animations": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -1,
+            5
+          ],
+          "y_range": [
+            -5,
+            5
+          ],
+          "position": [
+            0,
+            -1
+          ]
+        },
+        {
+          "type": "plot_function",
+          "expr": "2*x**2 - 8*x + 5",
+          "color": "blue",
+          "x_range": [
+            -0.5,
+            4.5
+          ]
+        },
+        {
+          "type": "mark_point",
+          "x": 2,
+          "y": -3,
+          "label": "顶点 (2, -3)",
+          "color": "red"
+        }
+      ]
+    },
+    {
+      "scene_id": 8,
+      "title": "总结",
+      "speech": "二次函数 f(x) = 2x² - 8x + 5 的顶点是 (2, -3)。由于 a = 2 > 0，所以这是开口向上的抛物线，顶点是最小值点。",
+      "animations": [
+        {
+          "type": "write_tex",
+          "tex": "Vertex = (2, -3)",
+          "color": "yellow",
+          "position": [
+            0,
+            2
+          ]
+        },
+        {
+          "type": "write_text",
+          "text": "最小值 f(2) = -3",
+          "color": "green",
+          "position": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

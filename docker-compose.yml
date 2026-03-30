@@ -1,0 +1,12 @@
+services:
+  lecture-api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - lecture-data:/app/lectures
+    restart: unless-stopped
+
+volumes:
+  lecture-data:

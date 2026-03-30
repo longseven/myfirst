@@ -1,0 +1,1357 @@
+{
+  "title": "圆台内接正方形与线面角",
+  "problem_html": "<p>圆台的下底面圆 O 的半径为 <span class='t' data-el='circle_bottom'>$\\sqrt{2}$</span>，ABCD 为圆 O 的内接正方形，E、M 为上底面圆 O1 上两点，F 为 BC 的中点，且 <span class='t' data-el='pl_ABE'>$平面\\ ABE\\perp$</span> <span class='t' data-el='pl_ABCD'>$平面\\ ABCD$</span>，<span class='t' data-el='ln_AF'>$AF\\perp DE$</span>。<br/>(1) 求证：<span class='t' data-el='eq_EAEB'>$EA=EB$</span>；<br/>(2) 若 <span class='t' data-el='ln_OO1'>$OO_1=2$</span>，直线 <span class='t' data-el='ln_FM'>$FM$</span> 与平面 <span class='t' data-el='pl_ADE'>$ADE$</span> 所成角正弦值为 <span class='t' data-el='sin_val'>$\\dfrac{3\\sqrt{10}}{10}$</span>，求线段 <span class='t' data-el='ln_ME'>$ME$</span> 长度。</p>",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "求证：<span class='t' data-el='eq_EAEB'>$EA=EB$</span>"
+    },
+    {
+      "label": "(2)",
+      "html": "若 <span class='t' data-el='ln_OO1'>$OO_1=2$</span>，<span class='t' data-el='ln_FM'>$FM$</span> 与 <span class='t' data-el='pl_ADE'>$ADE$</span> 所成角正弦值为 <span class='t' data-el='sin_val'>$\\dfrac{3\\sqrt{10}}{10}$</span>，求 <span class='t' data-el='ln_ME'>$ME$</span> 的长度。"
+    }
+  ],
+  "vertices": {
+    "O": [
+      0,
+      0,
+      0
+    ],
+    "A": [
+      1,
+      0,
+      0
+    ],
+    "B": [
+      1,
+      0,
+      2
+    ],
+    "C": [
+      -1,
+      0,
+      2
+    ],
+    "D": [
+      -1,
+      0,
+      0
+    ],
+    "E": [
+      0,
+      2,
+      -1.7320508
+    ],
+    "M": [
+      1,
+      2,
+      1
+    ],
+    "F": [
+      1,
+      0,
+      1
+    ],
+    "O1": [
+      0,
+      2,
+      0
+    ]
+  },
+  "vertex_styles": {
+    "O": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        -0.3,
+        -0.25,
+        0.3
+      ]
+    },
+    "A": {
+      "color": "#ffffff",
+      "dot_hex": "0xffffff",
+      "label_offset": [
+        0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "B": {
+      "color": "#ffffff",
+      "dot_hex": "0xffffff",
+      "label_offset": [
+        0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "C": {
+      "color": "#ffffff",
+      "dot_hex": "0xffffff",
+      "label_offset": [
+        -0.3,
+        -0.2,
+        0.2
+      ]
+    },
+    "D": {
+      "color": "#ffffff",
+      "dot_hex": "0xffffff",
+      "label_offset": [
+        -0.3,
+        -0.2,
+        0.2
+      ]
+    },
+    "E": {
+      "color": "#ff6b6b",
+      "dot_hex": "0xff6b6b",
+      "label_offset": [
+        0.3,
+        0.15,
+        0.2
+      ]
+    },
+    "M": {
+      "color": "#ffd93d",
+      "dot_hex": "0xffd93d",
+      "label_offset": [
+        0.2,
+        0.15,
+        0.2
+      ]
+    },
+    "F": {
+      "color": "#4ecdc4",
+      "dot_hex": "0x4ecdc4",
+      "label_offset": [
+        0.2,
+        -0.2,
+        0.25
+      ]
+    },
+    "O1": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        0.2,
+        0.15,
+        0.2
+      ]
+    }
+  },
+  "shapes": [
+    {
+      "type": "circle",
+      "center": [
+        0,
+        0,
+        0
+      ],
+      "radius": 1.4142136,
+      "color": "0x4488ff",
+      "tube_radius": 0.012,
+      "line_opacity": 0.8,
+      "fill": true,
+      "fill_opacity": 0.04,
+      "segments": 64
+    },
+    {
+      "type": "circle",
+      "center": [
+        0,
+        2,
+        0
+      ],
+      "radius": 1.4142136,
+      "color": "0x4488ff",
+      "tube_radius": 0.012,
+      "line_opacity": 0.8,
+      "fill": true,
+      "fill_opacity": 0.06,
+      "segments": 64
+    },
+    {
+      "type": "frustum",
+      "bottom_center": [
+        0,
+        0,
+        0
+      ],
+      "top_center": [
+        0,
+        2,
+        0
+      ],
+      "bottom_radius": 1.4142136,
+      "top_radius": 1.4142136,
+      "color": "0x4488ff",
+      "opacity": 0.04,
+      "guide_lines": true,
+      "guide_segments": 8,
+      "segments": 64
+    }
+  ],
+  "base_edges_solid": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "D",
+      "A"
+    ],
+    [
+      "O",
+      "A"
+    ],
+    [
+      "O",
+      "B"
+    ],
+    [
+      "O",
+      "C"
+    ],
+    [
+      "O",
+      "D"
+    ],
+    [
+      "O",
+      "E"
+    ],
+    [
+      "A",
+      "F"
+    ],
+    [
+      "D",
+      "E"
+    ],
+    [
+      "E",
+      "M"
+    ],
+    [
+      "O",
+      "O1"
+    ],
+    [
+      "A",
+      "O1"
+    ],
+    [
+      "B",
+      "O1"
+    ],
+    [
+      "C",
+      "O1"
+    ],
+    [
+      "D",
+      "O1"
+    ],
+    [
+      "O1",
+      "E"
+    ],
+    [
+      "O1",
+      "M"
+    ]
+  ],
+  "base_edges_dashed": [
+    [
+      "A",
+      "C"
+    ],
+    [
+      "B",
+      "D"
+    ],
+    [
+      "A",
+      "O1"
+    ],
+    [
+      "B",
+      "O1"
+    ],
+    [
+      "C",
+      "O1"
+    ],
+    [
+      "D",
+      "O1"
+    ]
+  ],
+  "base_edges_special": [],
+  "base_face_vertices": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "right_angles": [],
+  "lines": [
+    {
+      "id": "ln_FM",
+      "from": "F",
+      "to": "M",
+      "color": "0xff6b6b",
+      "dashed": false
+    },
+    {
+      "id": "ln_AF",
+      "from": "A",
+      "to": "F",
+      "color": "0x4ecdc4",
+      "dashed": false
+    },
+    {
+      "id": "ln_DE",
+      "from": "D",
+      "to": "E",
+      "color": "0xff6b6b",
+      "dashed": false
+    },
+    {
+      "id": "ln_EA",
+      "from": "E",
+      "to": "A",
+      "color": "0xff8844",
+      "dashed": false
+    },
+    {
+      "id": "ln_EB",
+      "from": "E",
+      "to": "B",
+      "color": "0xff8844",
+      "dashed": false
+    },
+    {
+      "id": "ln_EM",
+      "from": "E",
+      "to": "M",
+      "color": "0xffd93d",
+      "dashed": true
+    },
+    {
+      "id": "ln_OO1",
+      "from": "O",
+      "to": "O1",
+      "color": "0xaaaaaa",
+      "dashed": false
+    },
+    {
+      "id": "ln_OE",
+      "from": "O",
+      "to": "E",
+      "color": "0xaaaaaa",
+      "dashed": true
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_ABE",
+      "vertices": [
+        "A",
+        "B",
+        "E"
+      ],
+      "color": "0xff6b6b",
+      "opacity": 0.12
+    },
+    {
+      "id": "pl_ABCD",
+      "vertices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "color": "0x4488ff",
+      "opacity": 0.1
+    },
+    {
+      "id": "pl_ADE",
+      "vertices": [
+        "A",
+        "D",
+        "E"
+      ],
+      "color": "0xffd93d",
+      "opacity": 0.18
+    }
+  ],
+  "coord_system": {
+    "origin": "O",
+    "axes": [
+      {
+        "direction": "OA",
+        "color": "0xff4444",
+        "label": "x",
+        "tjs_vector": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "direction": "OO1",
+        "color": "0x44ff44",
+        "label": "y",
+        "tjs_vector": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "direction": "OD",
+        "color": "0x4488ff",
+        "label": "z",
+        "tjs_vector": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "length": 1.8,
+    "origin_label": "O",
+    "coord_labels": {}
+  },
+  "vectors": [
+    {
+      "id": "vec_AB",
+      "from": "A",
+      "to": "B",
+      "color": "0xffaa00",
+      "label": "→AB"
+    },
+    {
+      "id": "vec_AD",
+      "from": "A",
+      "to": "D",
+      "color": "0x00aaff",
+      "label": "→AD"
+    },
+    {
+      "id": "vec_AE",
+      "from": "A",
+      "to": "E",
+      "color": "0xff6b6b",
+      "label": "→AE"
+    },
+    {
+      "id": "vec_FM",
+      "from": "F",
+      "to": "M",
+      "color": "0xff6b6b",
+      "label": "→FM"
+    },
+    {
+      "id": "vec_DE",
+      "from": "D",
+      "to": "E",
+      "color": "0x00aaff",
+      "label": "→DE"
+    },
+    {
+      "id": "vec_AF",
+      "from": "A",
+      "to": "F",
+      "color": "0x4ecdc4",
+      "label": "→AF"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_ABE",
+      "center_vertices": [
+        "A",
+        "B",
+        "E"
+      ],
+      "math_direction": [
+        0,
+        -1,
+        0
+      ],
+      "color": "0xaa66ff",
+      "label": "n_ABE",
+      "scale": 1.5
+    },
+    {
+      "id": "nrm_ABCD",
+      "center_vertices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "math_direction": [
+        0,
+        1,
+        0
+      ],
+      "color": "0x66aaff",
+      "label": "n_ABCD",
+      "scale": 1.5
+    },
+    {
+      "id": "nrm_ADE",
+      "center_vertices": [
+        "A",
+        "D",
+        "E"
+      ],
+      "math_direction": [
+        0,
+        -1,
+        0
+      ],
+      "color": "0xffd93d",
+      "label": "n_ADE",
+      "scale": 1.5
+    }
+  ],
+  "face_defs": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "ABE",
+      "pts": [
+        "A",
+        "B",
+        "E"
+      ]
+    },
+    {
+      "name": "ADE",
+      "pts": [
+        "A",
+        "D",
+        "E"
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "D",
+      "A"
+    ],
+    [
+      "A",
+      "C"
+    ],
+    [
+      "B",
+      "D"
+    ],
+    [
+      "O",
+      "A"
+    ],
+    [
+      "O",
+      "B"
+    ],
+    [
+      "O",
+      "C"
+    ],
+    [
+      "O",
+      "D"
+    ],
+    [
+      "O",
+      "E"
+    ],
+    [
+      "O1",
+      "E"
+    ],
+    [
+      "O1",
+      "M"
+    ],
+    [
+      "A",
+      "F"
+    ],
+    [
+      "D",
+      "E"
+    ],
+    [
+      "E",
+      "M"
+    ],
+    [
+      "O",
+      "O1"
+    ],
+    [
+      "A",
+      "O1"
+    ],
+    [
+      "B",
+      "O1"
+    ],
+    [
+      "C",
+      "O1"
+    ],
+    [
+      "D",
+      "O1"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "ABE",
+      "pts": [
+        "A",
+        "B",
+        "E"
+      ]
+    },
+    {
+      "name": "ADE",
+      "pts": [
+        "A",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "name": "O",
+      "pts": [
+        "O"
+      ]
+    },
+    {
+      "name": "O1",
+      "pts": [
+        "O1"
+      ]
+    }
+  ],
+  "detail_rules": [
+    {
+      "condition": {
+        "all": [
+          "pl_ABE",
+          "pl_ABCD"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "面面垂直条件 ⟹ 法向量点积为0："
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ABE}\\cdot\\vec{n}_{ABCD}=\\begin{vmatrix}0&-2\\sqrt{2}&0\\end{vmatrix}\\cdot\\begin{vmatrix}0\\\\1\\\\0\\end{vmatrix}=0"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "ln_AF",
+          "ln_DE"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "AF ⟂ DE ⟹ 点积为0："
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{AF}\\cdot\\overrightarrow{DE}=(-1,0,-1)\\cdot(1,2,-\\sqrt{2})=0"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "vec_FM",
+          "pl_ADE",
+          "sin_val"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "线面角正弦公式："
+        },
+        {
+          "type": "tex",
+          "v": "\\sin\\theta=\\dfrac{|\\vec{n}_{ADE}\\cdot\\vec{FM}|}{|\\vec{n}_{ADE}|\\cdot|\\vec{FM}|}=\\dfrac{3\\sqrt{10}}{10}"
+        }
+      ]
+    }
+  ],
+  "sticky_elements": [
+    "coord_axes"
+  ],
+  "initial_camera": {
+    "position": [
+      5,
+      4,
+      5
+    ],
+    "target": [
+      0,
+      1,
+      0
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "同学们好，我们来看这道圆台中的立体几何题。题目给出圆台下底半径为根号2，内接正方形ABCD，点E和M在上底圆上，F是BC的中点，并且平面ABE垂直于底面ABCD，还给了AF垂直于DE的条件。",
+      "els": [
+        "circle_bottom",
+        "pl_ABCD",
+        "pl_ABE",
+        "ln_AF"
+      ],
+      "cam": [
+        5,
+        4,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "OA=OB=OC=OD=\\sqrt{2}"
+        },
+        {
+          "type": "desc",
+          "v": "正方形ABCD内接于底圆"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "我们先来建系。以圆心O为原点，x轴沿OA方向，z轴沿OD方向，y轴竖直向上经过O1点。这样四个顶点坐标可以立即写出来。",
+      "els": [
+        "coord_axes",
+        "O",
+        "A",
+        "D"
+      ],
+      "cam": [
+        5,
+        4,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "坐标系建立："
+        },
+        {
+          "type": "tex",
+          "v": "O(0,0,0),\\ A(1,0,0),\\ B(1,0,2),\\ C(-1,0,2),\\ D(-1,0,0),\\ O_1(0,2,0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "注意正方形的对角线AC和BD都在xoz平面上，它们交于原点O。而F是BC的中点，所以F的坐标是(1, 0, 1)。",
+      "els": [
+        "F",
+        "ln_AF",
+        "ln_FM"
+      ],
+      "cam": [
+        4,
+        3,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "F\\left(1,0,1\\right)\\quad(\\text{BC的中点})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "接下来我们来处理两个关键条件。先设E点在顶圆的坐标为(√2cosα, 2, √2sinα)，再利用AF⊥DE这个垂直条件来确定E的位置。",
+      "els": [
+        "ln_OE",
+        "ln_OO1"
+      ],
+      "cam": [
+        3,
+        2.5,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "E(\\sqrt{2}\\cos\\alpha,\\ 2,\\ \\sqrt{2}\\sin\\alpha)\\quad(\\text{在圆}O_1上)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "好，我们先证明第一问EA=EB。计算向量AF和DE的坐标：AF等于F减A，DE等于E减D。",
+      "els": [
+        "vec_AF",
+        "vec_DE",
+        "ln_AF",
+        "ln_DE"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{AF}=\\overrightarrow{OF}-\\overrightarrow{OA}=\\left(1-\\sqrt{2}\\cos\\alpha,\\ 2,\\ 1-\\sqrt{2}\\sin\\alpha\\right)"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{DE}=\\overrightarrow{OE}-\\overrightarrow{OD}=\\left(\\sqrt{2}\\cos\\alpha+1,\\ 2,\\ \\sqrt{2}\\sin\\alpha\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "AF⊥DE意味着它们的点积为零。把两个向量代入点积公式展开。",
+      "els": [
+        "ln_AF",
+        "ln_DE"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{AF}\\cdot\\overrightarrow{DE}=\\left(\\sqrt{2}\\cos\\alpha+1\\right)\\left(1-\\sqrt{2}\\cos\\alpha\\right)+2\\cdot2+\\left(\\sqrt{2}\\sin\\alpha-1\\right)\\left(\\sqrt{2}\\sin\\alpha+1\\right)=0"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "展开后，第一项和第三项分别是1减2cos²α和2sin²α减1，相加等于cos²α。加上常数4减1，总和为零化简得cosα等于0。",
+      "els": [
+        "ln_OE"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "2-2\\cos^2\\alpha+3+2\\sin^2\\alpha-1=0\\Rightarrow\\cos\\alpha=0"
+        },
+        {
+          "type": "tex",
+          "v": "\\Rightarrow E(0,2,\\pm\\sqrt{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "取E等于(0, 2, 负根号2)，现在验证EA和EB的模长，它们都等于2，所以EA确实等于EB。",
+      "els": [
+        "vec_EA",
+        "vec_EB",
+        "ln_EA",
+        "ln_EB",
+        "eq_EAEB"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "EA=|\\overrightarrow{OA}-\\overrightarrow{OE}|=|(1,0,\\sqrt{2})|=2"
+        },
+        {
+          "type": "tex",
+          "v": "EB=|\\overrightarrow{OB}-\\overrightarrow{OE}|=|(1,0,2+\\sqrt{2})|=2"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "我们也可以从几何角度验证：计算AB向量和AE向量的叉积，得到平面的法向量是(0, -2√2, 0)，这是一个纯水平的向量。",
+      "els": [
+        "vec_AB",
+        "vec_AE",
+        "nrm_ABE",
+        "pl_ABE"
+      ],
+      "cam": [
+        4,
+        2.5,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ABE}=\\overrightarrow{AB}\\times\\overrightarrow{AE}=\\begin{vmatrix}\\vec{i}&\\vec{j}&\\vec{k}\\\\2&0&2\\\\-1&2&-\\sqrt{2}\\end{vmatrix}=\\left(0,-2\\sqrt{2},0\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(1)题",
+      "speech": "因为平面ABCD的水平法向量是(0, 1, 0)，它与平面ABE的法向量点积为零，所以两个平面确实垂直。这与E的坐标满足AF·DE=0是一致的。",
+      "els": [
+        "nrm_ABCD",
+        "pl_ABCD",
+        "pl_ABE"
+      ],
+      "cam": [
+        4,
+        2.5,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ABE}\\cdot\\vec{n}_{ABCD}=\\left(0,-2\\sqrt{2},0\\right)\\cdot(0,1,0)=0"
+        },
+        {
+          "type": "desc",
+          "v": "故 plane ABE ⟂ plane ABCD ✓"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "现在进入第二问。我们设M为上底圆上的动点，用角度参数α来描述其坐标。这样M的坐标可以完整地写出来。",
+      "els": [
+        "ln_FM",
+        "pl_ADE"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "M\\left(\\sqrt{2}\\cos\\alpha,\\ 2,\\ \\sqrt{2}\\sin\\alpha\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "我们来计算向量FM。它的起点是F(1, 0, 1)，终点是M。所以FM等于根号2cosα减1，2，根号2sinα减1。",
+      "els": [
+        "vec_FM",
+        "ln_FM"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{FM}=\\left(\\sqrt{2}\\cos\\alpha-1,\\ 2,\\ \\sqrt{2}\\sin\\alpha-1\\right)"
+        },
+        {
+          "type": "tex",
+          "v": "|\\vec{FM}|=\\sqrt{4+2\\sqrt{2}\\left(\\cos\\alpha-\\sin\\alpha\\right)}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "接下来找平面ADE的法向量。A、D、E三点中，向量AB和AD都在水平面内，它们的叉积直接给出法向量(0, -4, 0)，方向沿y轴负方向。",
+      "els": [
+        "vec_AB",
+        "vec_AD",
+        "nrm_ADE",
+        "pl_ADE"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ADE}=\\overrightarrow{AB}\\times\\overrightarrow{AD}=\\begin{vmatrix}\\vec{i}&\\vec{j}&\\vec{k}\\\\2&0&0\\\\0&0&-2\\end{vmatrix}=\\left(0,-4,0\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "现在计算法向量与FM的点积。结果是2倍根号2乘以cosα减2的差。",
+      "els": [
+        "vec_FM",
+        "nrm_ADE"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ADE}\\cdot\\vec{FM}=\\left(0,-4,0\\right)\\cdot\\left(\\sqrt{2}\\cos\\alpha-1,\\ 2,\\ \\sqrt{2}\\sin\\alpha-1\\right)=-8"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "用三角恒等式化简：cosα减sinα等于根号2乘以cos(α加45度)。这样FM的模长表达式就简化了。",
+      "els": [
+        "vec_FM"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\cos\\alpha-\\sin\\alpha=\\sqrt{2}\\cos\\left(\\alpha+\\frac{\\pi}{4}\\right)"
+        },
+        {
+          "type": "tex",
+          "v": "|\\vec{FM}|=\\sqrt{4+4\\cos\\left(\\alpha+\\frac{\\pi}{4}\\right)}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "设γ等于α加45度。现在来计算n_ADE叉乘FM的模长，这里需要用叉积公式。",
+      "els": [
+        "vec_FM",
+        "nrm_ADE"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n}_{ADE}\\times\\vec{FM}=\\left(4,\\ -2\\sqrt{2}\\cos\\alpha+2\\sqrt{2}\\sin\\alpha,\\ 2\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "展开这个叉积的模平方，利用三角恒等式化简后得到8加4倍根号2乘以cosγ。再除以|FM|的平方，得到sin²θ等于这个比值。",
+      "els": [
+        "vec_FM"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "|\\vec{n}_{ADE}\\times\\vec{FM}|^2=20+8\\sqrt{2}\\cos\\gamma"
+        },
+        {
+          "type": "tex",
+          "v": "\\sin^2\\theta=\\frac{20+8\\sqrt{2}\\cos\\gamma}{32+32\\cos\\gamma}=\\frac{5+2\\sqrt{2}\\cos\\gamma}{8+8\\cos\\gamma}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "将sin²θ等于十分之九代入，化简后得到一个关于cosγ的二次方程。",
+      "els": [
+        "sin_val"
+      ],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\frac{5+2\\sqrt{2}\\cos\\gamma}{8+8\\cos\\gamma}=\\frac{9}{10}"
+        },
+        {
+          "type": "tex",
+          "v": "50+20\\sqrt{2}\\cos\\gamma=72+72\\cos\\gamma"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "移项整理得到关于cosγ的二次方程：3cos²γ减根号2乘cosγ减5等于0。",
+      "els": [],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "3\\cos^2\\gamma-\\sqrt{2}\\cos\\gamma-5=0"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "用求根公式解这个方程，判别式开根号得到根号204，约等于14.28。计算得到两个根，其中一个大于1被舍去。",
+      "els": [],
+      "cam": [
+        4,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\cos\\gamma=\\frac{\\sqrt{2}\\pm\\sqrt{204}}{6}=\\frac{\\sqrt{2}\\pm2\\sqrt{51}}{6}"
+        },
+        {
+          "type": "tex",
+          "v": "\\Rightarrow \\cos\\gamma=\\frac{\\sqrt{2}}{2}\\quad(\\text{舍去}|-3\\sqrt{2}/2|>1)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "所以cosγ等于根号2分之一，也就是cos(α加45度)等于根号2分之一，因此α等于45度。这样M的坐标就是(1, 2, 1)。",
+      "els": [
+        "M"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\cos\\gamma=\\frac{\\sqrt{2}}{2}\\Rightarrow\\alpha+\\frac{\\pi}{4}=\\frac{\\pi}{4}\\Rightarrow\\alpha=\\frac{\\pi}{4}"
+        },
+        {
+          "type": "tex",
+          "v": "M\\left(1,2,1\\right)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "最后计算ME的长度。E的坐标是(0, 2, 负根号2)，M是(1, 2, 1)，所以ME的模长等于根号下1的平方加0的平方加(1加根号2)的平方。",
+      "els": [
+        "ln_ME",
+        "ln_EM",
+        "pl_ADE"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "E\\left(0,2,-\\sqrt{2}\\right),\\ M(1,2,1)"
+        },
+        {
+          "type": "tex",
+          "v": "|ME|=\\sqrt{1^2+0^2+\\left(1+\\sqrt{2}\\right)^2}=\\sqrt{1+1+2\\sqrt{2}+2}=\\sqrt{4+2\\sqrt{2}}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第(2)题",
+      "speech": "注意到4加2倍根号2可以写成(根号2加1)的平方，所以ME等于根号2加1，等于根号5。验证完毕！",
+      "els": [
+        "ln_ME",
+        "ln_EM"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        0
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "|ME|=\\sqrt{4+2\\sqrt{2}}=\\sqrt{\\left(\\sqrt{2}+1\\right)^2}=\\sqrt{2}+1=\\sqrt{5}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "我们来回顾一下这道题的解题思路。第一问利用AF垂直于DE这个条件，通过坐标运算解出E的位置坐标，进而验证EA和EB相等。第二问则是参数化M点的坐标，结合线面角的正弦公式建立方程，最终解出α等于45度，求得ME等于根号5。",
+      "els": [
+        "pl_ABE",
+        "pl_ADE",
+        "ln_FM",
+        "ln_ME"
+      ],
+      "cam": [
+        5,
+        4,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "核心方法："
+        },
+        {
+          "type": "tex",
+          "v": "\\text{① 条件}AF\\perp DE\\Rightarrow\\cos\\alpha=0\\Rightarrow E(0,2,\\pm\\sqrt{2})"
+        },
+        {
+          "type": "tex",
+          "v": "\\text{② 线面角公式 }\\sin\\theta=\\frac{|\\vec{n}\\cdot\\vec{FM}|}{|\\vec{n}|\\cdot|\\vec{FM}|}=\\frac{3\\sqrt{10}}{10}\\Rightarrow\\alpha=\\frac{\\pi}{4}"
+        },
+        {
+          "type": "tex",
+          "v": "\\text{③ }|ME|=\\sqrt{5}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "本题的关键有两个：一是把几何条件转化为代数方程，通过AF垂直DE解出E的坐标；二是熟练运用线面角的正弦公式，这是空间向量法求角度的常用工具。希望同学们课后多加练习，熟练掌握这种参数化方法。",
+      "els": [
+        "sin_val",
+        "ln_ME"
+      ],
+      "cam": [
+        5,
+        4,
+        5,
+        0
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "答案："
+        },
+        {
+          "type": "tex",
+          "v": "(1)\\ EA=EB\\quad(2)\\ ME=\\sqrt{5}"
+        }
+      ],
+      "clear": false
+    }
+  ]
+}

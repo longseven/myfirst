@@ -1,0 +1,207 @@
+{
+  "title": "函数 f(x) = x³ - 3x 的单调区间和极值",
+  "scenes": [
+    {
+      "scene_id": 1,
+      "scene_name": "问题引入",
+      "speech": "今天我们来研究三次函数 f(x) = x³ - 3x 的单调性和极值问题。首先我们画出这个函数的图像，通过数形结合来直观理解。",
+      "animations": [
+        {
+          "type": "write_tex",
+          "tex": "f(x) = x^3 - 3x",
+          "position": [
+            0,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 2,
+      "scene_name": "求导分析",
+      "speech": "对于多项式函数，我们用求导法判断单调性。先求导数：f'(x) = 3x² - 3。",
+      "animations": [
+        {
+          "type": "transform_tex",
+          "from_tex": "f(x) = x^3 - 3x",
+          "to_tex": "f'(x) = 3x^2 - 3"
+        }
+      ]
+    },
+    {
+      "scene_id": 3,
+      "scene_name": "因式分解导数",
+      "speech": "把导数因式分解：f'(x) = 3(x² - 1) = 3(x+1)(x-1)。令导数为零，得到两个零点 x = -1 和 x = 1。",
+      "animations": [
+        {
+          "type": "transform_tex",
+          "from_tex": "f'(x) = 3x^2 - 3",
+          "to_tex": "f'(x) = 3(x+1)(x-1) = 0"
+        },
+        {
+          "type": "write_tex",
+          "tex": "x_1 = -1, \\quad x_2 = 1",
+          "position": [
+            0,
+            -0.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 4,
+      "scene_name": "绘制函数图像",
+      "speech": "现在我们在坐标系中画出 f(x) = x³ - 3x 的图像。这是一个奇函数，图像关于原点对称，有两个极值点。",
+      "animations": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -3,
+            3,
+            1
+          ],
+          "y_range": [
+            -4,
+            4,
+            1
+          ]
+        },
+        {
+          "type": "plot_function",
+          "expr": "x**3 - 3*x",
+          "color": "BLUE",
+          "x_range": [
+            -2.5,
+            2.5
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 5,
+      "scene_name": "标注极值点",
+      "speech": "在图像上标注两个极值点。当 x = -1 时，f(-1) = (-1)³ - 3(-1) = 2，这是极大值点。当 x = 1 时，f(1) = 1³ - 3(1) = -2，这是极小值点。",
+      "animations": [
+        {
+          "type": "mark_point",
+          "x": -1,
+          "y": 2,
+          "label": "(-1, 2)",
+          "color": "RED"
+        },
+        {
+          "type": "mark_point",
+          "x": 1,
+          "y": -2,
+          "label": "(1, -2)",
+          "color": "GREEN"
+        }
+      ]
+    },
+    {
+      "scene_id": 6,
+      "scene_name": "划分单调区间",
+      "speech": "根据导数符号，我们用三个区间来分析单调性。在数轴上标出两个零点 -1 和 1。",
+      "animations": [
+        {
+          "type": "draw_number_line",
+          "range": [
+            -3,
+            3
+          ],
+          "marks": [
+            -1,
+            1
+          ],
+          "signs": [
+            "+",
+            "-",
+            "+"
+          ]
+        }
+      ]
+    },
+    {
+      "scene_id": 7,
+      "scene_name": "高亮递增区间",
+      "speech": "当 x < -1 时，导数 f'(x) > 0，函数在 (-∞, -1) 上单调递增。我们把这段区间高亮显示。",
+      "animations": [
+        {
+          "type": "highlight_interval",
+          "x_from": -2.5,
+          "x_to": -1,
+          "label": "单调递增"
+        }
+      ]
+    },
+    {
+      "scene_id": 8,
+      "scene_name": "高亮递减区间",
+      "speech": "当 -1 < x < 1 时，导数 f'(x) < 0，函数在 (-1, 1) 上单调递减。",
+      "animations": [
+        {
+          "type": "highlight_interval",
+          "x_from": -1,
+          "x_to": 1,
+          "label": "单调递减"
+        }
+      ]
+    },
+    {
+      "scene_id": 9,
+      "scene_name": "高亮第二个递增区间",
+      "speech": "当 x > 1 时，导数 f'(x) > 0，函数在 (1, +∞) 上单调递增。",
+      "animations": [
+        {
+          "type": "highlight_interval",
+          "x_from": 1,
+          "x_to": 2.5,
+          "label": "单调递增"
+        }
+      ]
+    },
+    {
+      "scene_id": 10,
+      "scene_name": "总结",
+      "speech": "让我们用表格完整总结这个函数的单调区间和极值：单调递增区间是 (-∞, -1) 和 (1, +∞)，单调递减区间是 (-1, 1)；极大值为 f(-1) = 2，极小值为 f(1) = -2。",
+      "animations": [
+        {
+          "type": "draw_table",
+          "headers": [
+            "类型",
+            "区间/点",
+            "函数值"
+          ],
+          "rows": [
+            [
+              "单调递增区间",
+              "(-∞, -1)",
+              "—"
+            ],
+            [
+              "极大值点",
+              "x = -1",
+              "f(-1) = 2"
+            ],
+            [
+              "单调递减区间",
+              "(-1, 1)",
+              "—"
+            ],
+            [
+              "极小值点",
+              "x = 1",
+              "f(1) = -2"
+            ],
+            [
+              "单调递增区间",
+              "(1, +∞)",
+              "—"
+            ]
+          ],
+          "title": "f(x) = x³ - 3x 的单调性与极值"
+        }
+      ]
+    }
+  ]
+}

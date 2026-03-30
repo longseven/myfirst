@@ -1,0 +1,134 @@
+{
+  "title": "二次函数求最小值",
+  "scenes": [
+    {
+      "scene_id": 1,
+      "speech": "同学们好，今天我们来求函数 f(x) = x² - 2x + 1 的最小值。这个函数看起来是一个二次函数，让我们先来识别它的特点。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "content": "f(x) = x^2 - 2x + 1",
+          "position": [
+            -3,
+            1,
+            0
+          ],
+          "color": "white"
+        },
+        {
+          "type": "write_text",
+          "content": "识别：二次函数，a = 1 > 0，开口向上，有最小值",
+          "position": [
+            -3,
+            -0.5,
+            0
+          ],
+          "color": "yellow"
+        }
+      ]
+    },
+    {
+      "scene_id": 2,
+      "speech": "现在我们用配方法来求最小值。将 x² - 2x 配成完全平方，加上再减去 1。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "content": "f(x) = x^2 - 2x + 1",
+          "position": [
+            -3,
+            1,
+            0
+          ],
+          "color": "white"
+        },
+        {
+          "type": "transform_tex",
+          "from_tex": "f(x) = x^2 - 2x + 1",
+          "to_tex": "f(x) = (x^2 - 2x + 1) = (x - 1)^2",
+          "position": [
+            -3,
+            1,
+            0
+          ],
+          "color": "green"
+        }
+      ]
+    },
+    {
+      "scene_id": 3,
+      "speech": "配方完成，得到 f(x) = (x - 1)²。接下来我们画出这个函数的图像，直观看出最小值的位置。",
+      "instructions": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -1,
+            4,
+            1
+          ],
+          "y_range": [
+            -1,
+            5,
+            1
+          ],
+          "position": [
+            0,
+            -2,
+            0
+          ]
+        },
+        {
+          "type": "plot_function",
+          "expr": "(x-1)**2",
+          "color": "blue",
+          "x_range": [
+            -0.5,
+            3.5
+          ]
+        },
+        {
+          "type": "mark_point",
+          "x": 1,
+          "y": 0,
+          "label": "顶点(1, 0)",
+          "color": "red"
+        }
+      ]
+    },
+    {
+      "scene_id": 4,
+      "speech": "从图像可以看出，这是一个开口向上的抛物线，顶点就是最低点。当 x = 1 时，(x - 1)² = 0，所以最小值是 0。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "content": "\\text{当 } x = 1 \\text{ 时}",
+          "position": [
+            -3,
+            -1,
+            0
+          ],
+          "color": "white"
+        },
+        {
+          "type": "write_tex",
+          "content": "f(x)_{min} = (1-1)^2 = 0",
+          "position": [
+            -3,
+            -2,
+            0
+          ],
+          "color": "green"
+        },
+        {
+          "type": "write_text",
+          "content": "答案：最小值为 0",
+          "position": [
+            -3,
+            -3,
+            0
+          ],
+          "color": "yellow"
+        }
+      ]
+    }
+  ]
+}

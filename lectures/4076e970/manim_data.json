@@ -1,0 +1,143 @@
+{
+  "title": "二次函数顶点与对称轴",
+  "scenes": [
+    {
+      "scene_id": 1,
+      "title": "问题引入",
+      "speech": "同学们好，今天我们来研究二次函数f(x)=x²-4x+3的图像特征，找出它的顶点和对称轴。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "f(x) = x^2 - 4x + 3",
+          "position": "up",
+          "color": "white"
+        },
+        {
+          "type": "write_text",
+          "text": "求顶点坐标和对称轴方程",
+          "position": "down",
+          "color": "yellow"
+        }
+      ]
+    },
+    {
+      "scene_id": 2,
+      "title": "配方法求顶点",
+      "speech": "我们用配方法来化顶点式。将常数项3拆成4和-1，凑成完全平方。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "f(x) = x^2 - 4x + 3",
+          "position": "up",
+          "color": "white"
+        },
+        {
+          "type": "transform_tex",
+          "from_tex": "x^2 - 4x + 3",
+          "to_tex": "(x^2 - 4x + 4) - 4 + 3",
+          "color": "green"
+        },
+        {
+          "type": "transform_tex",
+          "from_tex": "(x^2 - 4x + 4) - 4 + 3",
+          "to_tex": "(x - 2)^2 - 1",
+          "color": "yellow"
+        }
+      ]
+    },
+    {
+      "scene_id": 3,
+      "title": "顶点公式法",
+      "speech": "用顶点公式x=-b/(2a)也能快速求得。对于f(x)=x²-4x+3，a=1，b=-4，所以x=-(-4)/(2×1)=2。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "x = -\\frac{b}{2a} = -\\frac{-4}{2 \\times 1} = 2",
+          "position": "up",
+          "color": "green"
+        },
+        {
+          "type": "write_tex",
+          "tex": "f(2) = 4 - 8 + 3 = -1",
+          "position": "down",
+          "color": "yellow"
+        },
+        {
+          "type": "write_tex",
+          "tex": "\\text{顶点} = (2, -1)",
+          "position": "right",
+          "color": "red"
+        }
+      ]
+    },
+    {
+      "scene_id": 4,
+      "title": "图像展示",
+      "speech": "现在我们画出函数图像，可以看到抛物线开口向上，顶点(2,-1)是最低点，对称轴是x=2这条竖直直线。",
+      "instructions": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -1,
+            5,
+            1
+          ],
+          "y_range": [
+            -3,
+            6,
+            1
+          ],
+          "position": "center"
+        },
+        {
+          "type": "plot_function",
+          "expr": "x**2 - 4*x + 3",
+          "color": "blue",
+          "x_range": [
+            -0.5,
+            4.5
+          ]
+        },
+        {
+          "type": "mark_point",
+          "x": 2,
+          "y": -1,
+          "label": "(2,-1)",
+          "color": "red"
+        },
+        {
+          "type": "draw_line",
+          "start": [
+            2,
+            -3
+          ],
+          "end": [
+            2,
+            6
+          ],
+          "label": "x=2",
+          "color": "yellow"
+        }
+      ]
+    },
+    {
+      "scene_id": 5,
+      "title": "结论总结",
+      "speech": "总结：顶点坐标是(2,-1)，对称轴是直线x=2。顶点在对称轴上，这是所有二次函数的共同特征。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "\\text{顶点}: (2, -1)",
+          "position": "up",
+          "color": "red"
+        },
+        {
+          "type": "write_tex",
+          "tex": "\\text{对称轴}: x = 2",
+          "position": "down",
+          "color": "yellow"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>立体几何 3D 讲解生成器</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f1a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;justify-content:center;padding:40px 20px}
+.container{max-width:680px;width:100%}
+h1{font-size:24px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:13px;color:#666;margin-bottom:30px}
+label{display:block;font-size:13px;color:#88a;margin-bottom:6px;font-weight:500}
+textarea{width:100%;background:#161625;border:1px solid #2a2a4a;border-radius:8px;color:#e0e0e0;padding:12px;font-size:14px;resize:vertical;outline:none;transition:border .2s}
+textarea:focus{border-color:#667eea}
+.row{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+.row select{background:#161625;border:1px solid #2a2a4a;border-radius:6px;color:#e0e0e0;padding:8px 12px;font-size:13px;outline:none;flex:1}
+.row label.check{font-size:13px;color:#88a;display:flex;align-items:center;gap:6px;cursor:pointer}
+.btn{width:100%;padding:14px;font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:8px;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.status{margin-top:24px;padding:20px;background:#161625;border-radius:10px;border:1px solid #2a2a4a;display:none}
+.status.show{display:block}
+.status-text{font-size:14px;color:#aab;margin-bottom:10px}
+.progress{height:6px;background:#1e1e35;border-radius:3px;overflow:hidden;margin-bottom:10px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .3s}
+.result{display:none;text-align:center}
+.result a{display:inline-block;margin-top:10px;padding:12px 28px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px}
+.history{margin-top:40px}
+.history h3{font-size:15px;color:#667eea;margin-bottom:12px}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#161625;border-radius:8px;margin-bottom:8px;border:1px solid #2a2a4a}
+.hist-item .title{font-size:13px;color:#ccc;flex:1}
+.hist-item .badge{font-size:11px;padding:3px 8px;border-radius:4px;margin-left:10px}
+.badge.done{background:#16a34a33;color:#22c55e}
+.badge.pending{background:#eab30833;color:#eab308}
+.badge.failed{background:#ef444433;color:#ef4444}
+.hist-item a{font-size:12px;color:#667eea;text-decoration:none;margin-left:10px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>立体几何 3D 讲解生成器</h1>
+  <p class="sub">输入一道立体几何题，AI 自动生成 3D 交互式讲解课件</p>
+
+  <label for="problem">题目文本 *</label>
+  <textarea id="problem" rows="5" placeholder="例：四棱锥P-ABCD中，PA⊥底面ABCD，PA=2，AC=2，BC=1，AB=√3。(1)若AD⊥PB，证明AD∥平面PBC；(2)若AD⊥DC，且二面角A-CP-D的正弦值为√42/7，求AD。"></textarea>
+
+  <div style="height:16px"></div>
+  <label for="answer">参考答案（可选，提升准确率）</label>
+  <textarea id="answer" rows="3" placeholder="例：(1)证明见解析 (2)AD=√3"></textarea>
+
+  <div style="height:16px"></div>
+  <div class="row">
+    <select id="ptype">
+      <option value="auto">自动检测题型</option>
+      <option value="线面平行">线面平行</option>
+      <option value="空间角度">空间角度</option>
+      <option value="空间距离">空间距离</option>
+      <option value="垂直关系">垂直关系</option>
+      <option value="混合">混合</option>
+    </select>
+    <label class="check"><input type="checkbox" id="tts" checked> 生成语音</label>
+  </div>
+
+  <button class="btn" id="genBtn" onclick="generate()">生成 3D 讲解</button>
+
+  <div class="status" id="statusCard">
+    <div class="status-text" id="statusText">准备中...</div>
+    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="result" id="result">
+      <a id="resultLink" href="#" target="_blank">打开 3D 讲解</a>
+    </div>
+  </div>
+
+  <div class="history" id="history"></div>
+</div>
+<script>
+let polling = null;
+
+async function generate() {
+  const problem = document.getElementById('problem').value.trim();
+  if (!problem) { alert('请输入题目'); return; }
+  const answer = document.getElementById('answer').value.trim() || null;
+  const ptype = document.getElementById('ptype').value;
+  const tts = document.getElementById('tts').checked;
+
+  document.getElementById('genBtn').disabled = true;
+  const card = document.getElementById('statusCard');
+  card.classList.add('show');
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('statusText').textContent = '提交中...';
+  document.getElementById('progressFill').style.width = '0%';
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ problem, answer, problem_type: ptype, enable_tts: tts })
+    });
+    const data = await res.json();
+    pollStatus(data.lecture_id);
+  } catch (e) {
+    document.getElementById('statusText').textContent = '提交失败: ' + e.message;
+    document.getElementById('genBtn').disabled = false;
+  }
+}
+
+function pollStatus(id) {
+  if (polling) clearInterval(polling);
+  polling = setInterval(async () => {
+    try {
+      const res = await fetch('/api/status/' + id);
+      const d = await res.json();
+      document.getElementById('statusText').textContent = d.message || d.status;
+      document.getElementById('progressFill').style.width = d.progress + '%';
+
+      if (d.status === 'done') {
+        clearInterval(polling); polling = null;
+        document.getElementById('genBtn').disabled = false;
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('resultLink').href = d.url;
+        loadHistory();
+      } else if (d.status === 'failed') {
+        clearInterval(polling); polling = null;
+        document.getElementById('genBtn').disabled = false;
+      }
+    } catch (e) {}
+  }, 2000);
+}
+
+async function loadHistory() {
+  try {
+    const res = await fetch('/api/tasks');
+    const list = await res.json();
+    const el = document.getElementById('history');
+    if (!list.length) { el.innerHTML = ''; return; }
+    el.innerHTML = '<h3>历史记录</h3>' + list.map(t => {
+      const badge = t.status === 'done' ? 'done' : t.status === 'failed' ? 'failed' : 'pending';
+      const link = t.url ? `<a href="${t.url}" target="_blank">查看</a>` : '';
+      return `<div class="hist-item"><span class="title">${t.lecture_id}</span><span class="badge ${badge}">${t.status}</span>${link}</div>`;
+    }).join('');
+  } catch (e) {}
+}
+
+loadHistory();
+</script>
+</body>
+</html>

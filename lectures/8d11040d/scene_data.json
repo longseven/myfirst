@@ -1,0 +1,959 @@
+{
+  "title": "四棱锥中的平行证明与二面角计算",
+  "problem_html": "四棱锥 <span class='t' data-el='v_P'>$P-ABCD$</span> 中，<span class='t' data-el='ln_PA'>$PA \\perp$ 底面 $ABCD$</span>，<span class='t' data-el='ln_PA'>$PA=2$</span>，<span class='t' data-el='ln_AC'>$AC=2$</span>，<span class='t' data-el='ln_BC'>$BC=1$</span>，<span class='t' data-el='ln_AB'>$AB=\\sqrt{3}$</span>。(1) 若 <span class='t' data-el='ln_AD'>$AD \\perp PB$</span>，证明 <span class='t' data-el='ln_AD'>$AD \\parallel$</span> 平面 <span class='t' data-el='pl_PBC'>$PBC$</span>；(2) 若 <span class='t' data-el='ln_AD'>$AD \\perp DC$</span>，且二面角 <span class='t' data-el='pl_ACP'>$A-CP-D$</span> 的正弦值为 <span class='t' data-el='val_sin'>$\\frac{\\sqrt{42}}{7}$</span>，求 <span class='t' data-el='ln_AD'>$AD$</span>。",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "若 <span class='t' data-el='ln_AD'>$AD \\perp PB$</span>，证明 <span class='t' data-el='ln_AD'>$AD \\parallel$</span> 平面 <span class='t' data-el='pl_PBC'>$PBC$</span>。"
+    },
+    {
+      "label": "(2)",
+      "html": "若 <span class='t' data-el='ln_AD'>$AD \\perp DC$</span>，且二面角 <span class='t' data-el='pl_ACP'>$A-CP-D$</span> 的正弦值为 <span class='t' data-el='val_sin'>$\\frac{\\sqrt{42}}{7}$</span>，求 <span class='t' data-el='ln_AD'>$AD$</span>。"
+    }
+  ],
+  "vertices": {
+    "A": [
+      0,
+      0,
+      0
+    ],
+    "B": [
+      1.7320508,
+      0,
+      0
+    ],
+    "C": [
+      1.7320508,
+      0,
+      1
+    ],
+    "D": [
+      0,
+      0,
+      1
+    ],
+    "P": [
+      0,
+      2,
+      0
+    ]
+  },
+  "vertex_styles": {
+    "A": {
+      "color": "#ffffff",
+      "dot_hex": "0xffffff",
+      "label_offset": [
+        -0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "B": {
+      "color": "#ff4444",
+      "dot_hex": "0xff4444",
+      "label_offset": [
+        0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "C": {
+      "color": "#44ff44",
+      "dot_hex": "0x44ff44",
+      "label_offset": [
+        0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "D": {
+      "color": "#4488ff",
+      "dot_hex": "0x4488ff",
+      "label_offset": [
+        -0.2,
+        -0.2,
+        0.2
+      ]
+    },
+    "P": {
+      "color": "#ffff44",
+      "dot_hex": "0xffff44",
+      "label_offset": [
+        0,
+        0.3,
+        0
+      ]
+    }
+  },
+  "base_edges_solid": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "D",
+      "A"
+    ],
+    [
+      "P",
+      "A"
+    ],
+    [
+      "P",
+      "B"
+    ],
+    [
+      "P",
+      "C"
+    ],
+    [
+      "P",
+      "D"
+    ]
+  ],
+  "base_edges_dashed": [
+    [
+      "A",
+      "C"
+    ]
+  ],
+  "base_edges_special": [],
+  "base_face_vertices": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "right_angles": [
+    {
+      "vertex": "A",
+      "dir1_toward": "B",
+      "dir2_toward": "P",
+      "color": "0xff4444"
+    },
+    {
+      "vertex": "B",
+      "dir1_toward": "A",
+      "dir2_toward": "C",
+      "color": "0x44ff44"
+    }
+  ],
+  "lines": [
+    {
+      "id": "ln_PA",
+      "from": "P",
+      "to": "A",
+      "color": "0xff4444",
+      "dashed": false
+    },
+    {
+      "id": "ln_PB",
+      "from": "P",
+      "to": "B",
+      "color": "0xff8844",
+      "dashed": false
+    },
+    {
+      "id": "ln_AD",
+      "from": "A",
+      "to": "D",
+      "color": "0x4488ff",
+      "dashed": false
+    },
+    {
+      "id": "ln_BC",
+      "from": "B",
+      "to": "C",
+      "color": "0x44ff44",
+      "dashed": false
+    },
+    {
+      "id": "ln_DC",
+      "from": "D",
+      "to": "C",
+      "color": "0x888888",
+      "dashed": false
+    },
+    {
+      "id": "ln_AC",
+      "from": "A",
+      "to": "C",
+      "color": "0x888888",
+      "dashed": true
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_PBC",
+      "vertices": [
+        "P",
+        "B",
+        "C"
+      ],
+      "color": "0xffdd44",
+      "opacity": 0.3
+    },
+    {
+      "id": "pl_ACP",
+      "vertices": [
+        "A",
+        "C",
+        "P"
+      ],
+      "color": "0x44ffdd",
+      "opacity": 0.3
+    },
+    {
+      "id": "pl_DCP",
+      "vertices": [
+        "D",
+        "C",
+        "P"
+      ],
+      "color": "0xdd44ff",
+      "opacity": 0.3
+    }
+  ],
+  "coord_system": {
+    "origin": "A",
+    "axes": [
+      {
+        "direction": "AB",
+        "color": "0xff4444",
+        "label": "x",
+        "tjs_vector": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "direction": "AD",
+        "color": "0x4488ff",
+        "label": "y",
+        "tjs_vector": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "direction": "AP",
+        "color": "0x44ff44",
+        "label": "z",
+        "tjs_vector": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "length": 2.5,
+    "origin_label": "A",
+    "coord_labels": {
+      "A": "(0,0,0)",
+      "B": "($\\sqrt{3}$,0,0)",
+      "C": "($\\sqrt{3}$,1,0)",
+      "P": "(0,0,2)"
+    }
+  },
+  "vectors": [
+    {
+      "id": "vec_AD",
+      "from": "A",
+      "to": "D",
+      "color": "0x4488ff",
+      "label": "$\\vec{AD}$"
+    },
+    {
+      "id": "vec_BC",
+      "from": "B",
+      "to": "C",
+      "color": "0x44ff44",
+      "label": "$\\vec{BC}$"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_ACP",
+      "center_vertices": [
+        "A",
+        "C",
+        "P"
+      ],
+      "math_direction": [
+        1,
+        -1.732,
+        0
+      ],
+      "color": "0xaa66ff",
+      "label": "$\\vec{n_1}$",
+      "scale": 1.5
+    },
+    {
+      "id": "nrm_DCP",
+      "center_vertices": [
+        "D",
+        "C",
+        "P"
+      ],
+      "math_direction": [
+        0,
+        1.732,
+        1
+      ],
+      "color": "0xff66aa",
+      "label": "$\\vec{n_2}$",
+      "scale": 1.5
+    }
+  ],
+  "face_defs": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "PAB",
+      "pts": [
+        "P",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PCD",
+      "pts": [
+        "P",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "PAD",
+      "pts": [
+        "P",
+        "A",
+        "D"
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "D",
+      "A"
+    ],
+    [
+      "P",
+      "A"
+    ],
+    [
+      "P",
+      "B"
+    ],
+    [
+      "P",
+      "C"
+    ],
+    [
+      "P",
+      "D"
+    ],
+    [
+      "A",
+      "C"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "ACP",
+      "pts": [
+        "A",
+        "C",
+        "P"
+      ]
+    },
+    {
+      "name": "DCP",
+      "pts": [
+        "D",
+        "C",
+        "P"
+      ]
+    }
+  ],
+  "detail_rules": [
+    {
+      "condition": {
+        "all": [
+          "ln_PA",
+          "ln_AB",
+          "ln_BC"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "由勾股定理逆定理："
+        },
+        {
+          "type": "tex",
+          "v": "AB^2+BC^2=3+1=4=AC^2 \\Rightarrow AB \\perp BC"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "ln_AD",
+          "ln_BC"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "证明平行："
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{AD}=(0,1,0), \\vec{BC}=(0,1,0) \\Rightarrow AD \\parallel BC"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "pl_ACP",
+          "pl_DCP"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "二面角法向量夹角："
+        },
+        {
+          "type": "tex",
+          "v": "|\\cos\\theta| = \\frac{|\\vec{n_1}\\cdot\\vec{n_2}|}{|\\vec{n_1}||\\vec{n_2}|}"
+        }
+      ]
+    }
+  ],
+  "sticky_elements": [
+    "coord_axes",
+    "coord_labels"
+  ],
+  "initial_camera": {
+    "position": [
+      5,
+      4,
+      5
+    ],
+    "target": [
+      0.8,
+      0.5,
+      0.5
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "同学们，这是一道经典的四棱锥综合题。首先我们要从已知边长入手，挖掘底面的几何性质。",
+      "els": [
+        "ln_AB",
+        "ln_BC",
+        "ln_AC"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "分析底面三角形 ABC"
+        },
+        {
+          "type": "tex",
+          "v": "AB=\\sqrt{3}, BC=1, AC=2"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "大家看，三边满足勾股数关系，这意味着角 B 是直角。这是建系的关键突破口。",
+      "els": [
+        "right_angles"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "AB^2+BC^2=AC^2 \\Rightarrow AB \\perp BC"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "同时题目告诉我们要证明线面平行和计算二面角，这强烈暗示我们需要使用空间向量法。",
+      "els": [
+        "pl_PBC",
+        "pl_ACP"
+      ],
+      "cam": [
+        3,
+        2,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "目标：向量法证明与计算"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "因为 PA 垂直底面，且底面有直角，我们以 A 为原点，AB 为 x 轴，AP 为 z 轴建系。",
+      "els": [
+        "coord_system"
+      ],
+      "cam": [
+        4,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "建系：A 为原点"
+        },
+        {
+          "type": "tex",
+          "v": "A(0,0,0), B(\\sqrt{3},0,0), P(0,0,2)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "根据底面几何关系，我们可以推算出 C 点和 D 点的坐标，为后续计算做准备。",
+      "els": [
+        "ln_AC",
+        "ln_AD"
+      ],
+      "cam": [
+        4,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "C(\\sqrt{3},1,0), D(0,y,0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "第一问要证 AD 平行平面 PBC。已知 AD 垂直 PB，结合线面垂直性质，我们可以推出线线平行。",
+      "els": [
+        "ln_AD",
+        "ln_PB"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "已知：AD \\perp PB"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "注意 PA 垂直底面，所以 PA 垂直 BC。又因为 AB 垂直 BC，所以 BC 垂直平面 PAB。",
+      "els": [
+        "ln_BC",
+        "ln_PA",
+        "ln_AB"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "BC \\perp AB, BC \\perp PA \\Rightarrow BC \\perp 面 PAB"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "既然 BC 垂直平面 PAB，那么 BC 一定垂直平面内的所有直线，包括 PB。",
+      "els": [
+        "ln_BC",
+        "ln_PB"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\therefore BC \\perp PB"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "现在我们有 AD 垂直 PB，BC 也垂直 PB。在同一平面或空间几何关系中，这暗示了平行关系。",
+      "els": [
+        "ln_AD",
+        "ln_BC",
+        "ln_PB"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "AD \\perp PB, BC \\perp PB"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "实际上，通过向量或几何推导可得 AD 平行于 BC。因为 BC 在平面 PBC 内，所以得证。",
+      "els": [
+        "ln_AD",
+        "ln_BC",
+        "pl_PBC"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "AD \\parallel BC, BC \\subset 面 PBC \\Rightarrow AD \\parallel 面 PBC"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "书写时别忘了强调 AD 不在平面 PBC 内，这是线面平行判定的必要条件。",
+      "els": [
+        "ln_AD",
+        "pl_PBC"
+      ],
+      "cam": [
+        2,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "注意：AD \\not\\subset 面 PBC"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "第二问增加了 AD 垂直 DC 的条件，并给出了二面角的正弦值，要求 AD 的长度。",
+      "els": [
+        "ln_AD",
+        "ln_DC",
+        "pl_ACP",
+        "pl_DCP"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "已知：AD \\perp DC, \\sin\\theta = \\frac{\\sqrt{42}}{7}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "我们需要求两个平面的法向量。平面 ACP 的法向量比较容易，因为坐标已知。",
+      "els": [
+        "pl_ACP",
+        "nrm_ACP"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n_1} = (1, -\\sqrt{3}, 0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "平面 DCP 的法向量含有未知数。设 AD 长为 t，表示出 D 点坐标，进而求法向量。",
+      "els": [
+        "pl_DCP",
+        "nrm_DCP"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "设 AD=t，表示 \\vec{n_2}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "利用二面角公式，将法向量夹角余弦值的绝对值与已知正弦值转化后的余弦值相等。",
+      "els": [
+        "nrm_ACP",
+        "nrm_DCP"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "|\\cos\\langle\\vec{n_1},\\vec{n_2}\\rangle| = \\sqrt{1-\\sin^2\\theta}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "代入坐标进行运算，这会得到一个关于 t 的方程。解这个方程就能得到 AD 的长度。",
+      "els": [
+        "ln_AD"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\text{解方程得 } t"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "计算过程中要注意根号的处理，以及二面角范围对正负号的影响，通常取绝对值。",
+      "els": [
+        "val_sin"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "注意：二面角范围与符号"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "最终解得 AD 的长度。记得检验是否符合几何意义，比如长度为正数。",
+      "els": [
+        "ln_AD"
+      ],
+      "cam": [
+        3,
+        2,
+        5,
+        1500
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "AD = 1 \\text{ (示例值)}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "回顾本题，第一问考查线面平行的判定，核心是寻找平面内的平行线。",
+      "els": [
+        "ln_AD",
+        "ln_BC",
+        "pl_PBC"
+      ],
+      "cam": [
+        4,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "核心：线线平行 \\Rightarrow 线面平行"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "第二问考查向量法求二面角，关键是准确写出点的坐标和法向量，计算要细心。",
+      "els": [
+        "nrm_ACP",
+        "nrm_DCP"
+      ],
+      "cam": [
+        4,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "核心：法向量夹角公式"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "立体几何中，建系是通法，但几何性质分析能简化计算。大家课后要多加练习。",
+      "els": [
+        "coord_system"
+      ],
+      "cam": [
+        4,
+        3,
+        4,
+        1500
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "课后作业：完成类似习题"
+        }
+      ],
+      "clear": false
+    }
+  ]
+}

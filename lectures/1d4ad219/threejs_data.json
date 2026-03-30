@@ -1,0 +1,736 @@
+{
+  "title": "圆台内接正方形与空间角度问题",
+  "problem_html": "圆台的下底面圆 O 的半径为<span class='t' data-el='ln_OA'>$\\sqrt{2}$</span>，ABCD 为圆 O 的内接正方形，E、M 为上底面圆 O₁ 上两点，F 为 BC 的中点，且<span class='t' data-el='pl_ABE'>平面 ABE</span>⊥<span class='t' data-el='pl_ABCD'>平面 ABCD</span>，AF⊥DE。<br>(1) 求证：EA=EB；<br>(2) 若 OO₁=2，直线 FM 与平面 ADE 所成角正弦值为 3√10/10，求线段 ME 长度。",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "求证：EA=EB"
+    },
+    {
+      "label": "(2)",
+      "html": "若 OO₁=2，直线 FM 与平面 ADE 所成角正弦值为 3√10/10，求线段 ME 长度。"
+    }
+  ],
+  "vertices": {
+    "D": [
+      0,
+      0,
+      0
+    ],
+    "A": [
+      1.4142136,
+      0,
+      0
+    ],
+    "B": [
+      1.4142136,
+      1.4142136,
+      0
+    ],
+    "C": [
+      0,
+      1.4142136,
+      0
+    ],
+    "O": [
+      0,
+      0,
+      0
+    ],
+    "O1": [
+      0,
+      0,
+      2
+    ],
+    "E": [
+      -1,
+      1,
+      2
+    ],
+    "M": [
+      0,
+      -1,
+      2
+    ],
+    "F": [
+      0,
+      1.4142136,
+      0
+    ]
+  },
+  "vertex_styles": {
+    "E": {
+      "color": "0xff3333",
+      "size": 0.12
+    },
+    "M": {
+      "color": "0xff3333",
+      "size": 0.12
+    },
+    "F": {
+      "color": "0x33aaff",
+      "size": 0.12
+    },
+    "O1": {
+      "color": "0xaaaaaa",
+      "size": 0.08
+    }
+  },
+  "base_edges_solid": [
+    [
+      "D",
+      "A"
+    ],
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ]
+  ],
+  "base_edges_dashed": [
+    [
+      "D",
+      "C"
+    ],
+    [
+      "A",
+      "C"
+    ]
+  ],
+  "base_edges_special": [
+    {
+      "from": "E",
+      "to": "M",
+      "color": "0xff4444",
+      "width": 3
+    }
+  ],
+  "base_face_vertices": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "right_angles": [
+    {
+      "vertex": "A",
+      "dir1_toward": "B",
+      "dir2_toward": "D"
+    }
+  ],
+  "lines": [
+    {
+      "id": "ln_DA",
+      "from": "D",
+      "to": "A"
+    },
+    {
+      "id": "ln_AB",
+      "from": "A",
+      "to": "B"
+    },
+    {
+      "id": "ln_BC",
+      "from": "B",
+      "to": "C"
+    },
+    {
+      "id": "ln_CD",
+      "from": "C",
+      "to": "D"
+    },
+    {
+      "id": "ln_O1E",
+      "from": "O1",
+      "to": "E"
+    },
+    {
+      "id": "ln_O1M",
+      "from": "O1",
+      "to": "M"
+    },
+    {
+      "id": "ln_AE",
+      "from": "A",
+      "to": "E"
+    },
+    {
+      "id": "ln_BE",
+      "from": "B",
+      "to": "E"
+    },
+    {
+      "id": "ln_DE",
+      "from": "D",
+      "to": "E"
+    },
+    {
+      "id": "ln_FM",
+      "from": "F",
+      "to": "M"
+    },
+    {
+      "id": "ln_AF",
+      "from": "A",
+      "to": "F"
+    },
+    {
+      "id": "ln_AD",
+      "from": "A",
+      "to": "D"
+    },
+    {
+      "id": "ln_OO1",
+      "from": "O",
+      "to": "O1"
+    },
+    {
+      "id": "ln_DM",
+      "from": "D",
+      "to": "M"
+    },
+    {
+      "id": "ln_EM",
+      "from": "E",
+      "to": "M"
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_ABE",
+      "vertices": [
+        "A",
+        "B",
+        "E"
+      ]
+    },
+    {
+      "id": "pl_ABCD",
+      "vertices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "id": "pl_ADE",
+      "vertices": [
+        "A",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "id": "pl_ABC",
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "coord_system": {
+    "origin": "D",
+    "axes": [
+      {
+        "axis": "x",
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "label": "",
+        "color": "0xe74c3c"
+      },
+      {
+        "axis": "y",
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "label": "",
+        "color": "0x2ecc71"
+      },
+      {
+        "axis": "z",
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "label": "",
+        "color": "0x3498db"
+      }
+    ]
+  },
+  "vectors": [
+    {
+      "id": "vec_AD",
+      "from": "A",
+      "to": "D"
+    },
+    {
+      "id": "vec_AE",
+      "from": "A",
+      "to": "E"
+    },
+    {
+      "id": "vec_AF",
+      "from": "A",
+      "to": "F"
+    },
+    {
+      "id": "vec_DE",
+      "from": "D",
+      "to": "E"
+    },
+    {
+      "id": "vec_FM",
+      "from": "F",
+      "to": "M"
+    },
+    {
+      "id": "vec_EM",
+      "from": "E",
+      "to": "M"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_ADE",
+      "center_vertices": [
+        "A",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "id": "nrm_ABE",
+      "center_vertices": [
+        "A",
+        "B",
+        "E"
+      ]
+    }
+  ],
+  "shapes": [
+    {
+      "type": "frustum",
+      "id": "frustum_main",
+      "bottom_center": [
+        0,
+        0,
+        0
+      ],
+      "bottom_radius": 1.4142136,
+      "top_center": [
+        0,
+        0,
+        2
+      ],
+      "top_radius": 1,
+      "bottom_vertices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "top_points": [
+        "E",
+        "M"
+      ]
+    }
+  ],
+  "face_defs": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "ADE",
+      "pts": [
+        "A",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "name": "ABE",
+      "pts": [
+        "A",
+        "B",
+        "E"
+      ]
+    },
+    {
+      "name": "BDE",
+      "pts": [
+        "B",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "name": "圆O",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "curve": true,
+      "center": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "圆O1",
+      "pts": [
+        "E",
+        "M",
+        "O1"
+      ],
+      "curve": true,
+      "center": [
+        0,
+        0,
+        2
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "D",
+      "A"
+    ],
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "D",
+      "E"
+    ],
+    [
+      "A",
+      "E"
+    ],
+    [
+      "B",
+      "E"
+    ],
+    [
+      "F",
+      "M"
+    ],
+    [
+      "E",
+      "M"
+    ],
+    [
+      "D",
+      "M"
+    ],
+    [
+      "A",
+      "F"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "ABCD",
+      "pts": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "name": "ADE",
+      "pts": [
+        "A",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "name": "ABE",
+      "pts": [
+        "A",
+        "B",
+        "E"
+      ]
+    },
+    {
+      "name": "BDE",
+      "pts": [
+        "B",
+        "D",
+        "E"
+      ]
+    }
+  ],
+  "detail_rules": [
+    {
+      "condition": {
+        "all": [
+          "pl_ABE",
+          "pl_ABCD"
+        ]
+      },
+      "content": [
+        {
+          "type": "plane_perp",
+          "plane1": "pl_ABE",
+          "plane2": "pl_ABCD"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "ln_AF",
+          "ln_DE"
+        ]
+      },
+      "content": [
+        {
+          "type": "line_perp",
+          "line1": "ln_AF",
+          "line2": "ln_DE"
+        }
+      ]
+    }
+  ],
+  "sticky_elements": [
+    "coord_axes",
+    "nrm_ADE"
+  ],
+  "initial_camera": {
+    "position": [
+      4,
+      3,
+      5
+    ],
+    "target": [
+      0.3,
+      0.3,
+      0.8
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "圆台下底半径√2，内接正方形ABCD，上底有E、M。已知面ABE⊥面ABCD，AF⊥DE。目标是证明EA=EB，并求ME长度。",
+      "els": [
+        "frustum_main",
+        "pl_ABE",
+        "pl_ABCD",
+        "ln_AF",
+        "ln_DE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "建系",
+      "speech": "以D为原点，DA为x轴，DC为y轴，z轴向上建立坐标系。由正方形性质，D(0,0,0)，A(√2,0,0)，B(√2,√2,0)，C(0,√2,0)。",
+      "els": [
+        "coord_axes",
+        "D",
+        "A",
+        "B",
+        "C"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "确定上底",
+      "speech": "圆台是直圆台，所以上底圆心O₁在z轴上。OO₁=2，故O₁(0,0,2)。",
+      "els": [
+        "O",
+        "O1",
+        "ln_OO1"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "设参E点",
+      "speech": "设E在圆O₁上，半径设为r，则E(x_E,y_E,2)，满足x_E²+y_E²=r²。",
+      "els": [
+        "E",
+        "O1",
+        "ln_O1E"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "利用面面垂直条件①",
+      "speech": "由面ABE⊥面ABCD，AB=(0,√2,0)，AE=(x_E-√2,y_E,2)。面ABE的法向量n_ABE=AB×AE，其z分量为-(√2·x_E+√2·y_E)。",
+      "els": [
+        "pl_ABE",
+        "vec_AB",
+        "vec_AE",
+        "nrm_ABE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "利用面面垂直条件②",
+      "speech": "由于面ABE⊥面ABCD，法向量n_ABE应平行于xy平面，即z分量为0。所以√2·x_E+√2·y_E=0，即y_E=-x_E。E的投影在直线y=-x上。",
+      "els": [
+        "pl_ABE",
+        "pl_ABCD"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "利用AF⊥DE",
+      "speech": "F是BC中点，故F(0,√2,0)。AF=(-√2,√2,0)，DE=(x_E,y_E,2)。由AF⊥DE，两向量点乘为零：-√2·x_E+√2·y_E=0。",
+      "els": [
+        "F",
+        "ln_AF",
+        "ln_DE",
+        "vec_AF",
+        "vec_DE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "确定E的坐标",
+      "speech": "联立y_E=-x_E和-x_E+y_E=0得y_E=-x_E，且x_E²+y_E²=r²。由第一问EA=EB的要求（即E到A和B距离相等），解得x_E=-1,y_E=1,r²=2。",
+      "els": [
+        "E",
+        "ln_AE",
+        "ln_BE",
+        "vec_AE",
+        "vec_BE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "证明EA=EB",
+      "speech": "E(-1,1,2)，A(√2,0,0)，B(√2,√2,0)。|EA|²=(-1-√2)²+1²+4=6，|EB|²=(-1-√2)²+(1-√2)²+4=6，故EA=EB=√6。",
+      "els": [
+        "ln_AE",
+        "ln_BE",
+        "E",
+        "A",
+        "B"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "分析第二问",
+      "speech": "第二问：OO₁=2已满足。设M在圆O₁上，M(x_M,y_M,2)，x_M²+y_M²=2。需用线面角条件求ME。",
+      "els": [
+        "M",
+        "O1",
+        "ln_O1M"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "计算F到面ADE的距离①",
+      "speech": "先求面ADE的法向量。AD=(-√2,0,0)，AE=(-1-√2,1,2)。用叉积算n=(AD×AE)。",
+      "els": [
+        "pl_ADE",
+        "vec_AD",
+        "vec_AE",
+        "nrm_ADE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "计算F到面ADE的距离②",
+      "speech": "计算标量三重积(AF,AD,AE)=4√2，面ADE面积|AD×AE|=2√2，故d(F,面ADE)=|4√2|÷2√2=2。",
+      "els": [
+        "ln_AF",
+        "nrm_ADE"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "建立线面角方程",
+      "speech": "设α为FM与面ADE所成角，sinα=d(F,面ADE)÷|FM|=2÷|FM|=3√10/10，故|FM|²=40/9≈4.444。",
+      "els": [
+        "ln_FM"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "计算|FM|²",
+      "speech": "F(0,√2,0)，M(x_M,y_M,2)，|FM|²=x_M²+(y_M-√2)²+4=8-2√2·y_M=40/9，解得y_M=-1。",
+      "els": [
+        "F",
+        "M",
+        "ln_FM"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "确定M的坐标",
+      "speech": "由x_M²+y_M²=2且y_M=-1，得x_M=0或x_M=0。故M(0,-1,2)。",
+      "els": [
+        "M",
+        "O1"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "验证线面角",
+      "speech": "验证：|FM|²=2+(√2+1)²+4=5，故|FM|=√5，sinα=2÷√5=3√10/10。条件满足！",
+      "els": [
+        "ln_FM",
+        "F",
+        "M"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "计算ME长度",
+      "speech": "最后求ME：E(-1,1,2)，M(0,-1,2)，|EM|²=1+4+0=5，故ME=√5。",
+      "els": [
+        "ln_EM",
+        "E",
+        "M"
+      ],
+      "cam": []
+    },
+    {
+      "phase": "总结",
+      "speech": "回顾全程：建系利用面ABE⊥ABCD得E投影在y=-x上，再用AF⊥DE锁定E的具体位置。由线面角正弦值反推出M的坐标，最终求得ME=√5。",
+      "els": [
+        "frustum_main",
+        "ln_EM",
+        "ln_AE",
+        "ln_BE"
+      ],
+      "cam": []
+    }
+  ]
+}

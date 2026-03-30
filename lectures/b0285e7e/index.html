@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>二次函数求最小值</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, 'PingFang SC', sans-serif; background:#0a0a0f; color:#e0e0e0; }
+.container { max-width:1200px; margin:0 auto; padding:20px; }
+h1 { font-size:1.5rem; color:#64ffda; margin-bottom:20px; text-align:center; }
+.video-section { background:#111; border-radius:12px; overflow:hidden; margin-bottom:24px; }
+video { width:100%; display:block; }
+.no-video { padding:60px 20px; text-align:center; color:#666; font-size:1.1rem; line-height:1.8; }
+.steps-section { display:grid; gap:16px; }
+.step-card { background:#1a1a2e; border-radius:10px; padding:16px 20px; border-left:3px solid #333; transition:border-color .2s; }
+.step-card:hover { border-left-color:#64ffda; }
+.step-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.step-num { background:#64ffda; color:#0a0a0f; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; }
+.step-phase { color:#888; font-size:0.85rem; }
+.step-speech { font-size:0.95rem; line-height:1.6; color:#ccc; }
+.formula { margin:8px 0; padding:8px 12px; background:#111; border-radius:6px; overflow-x:auto; }
+.summary-card { background:#1a2a1a; border:1px solid #2a4a2a; border-radius:10px; padding:20px; margin-top:24px; }
+.summary-card h3 { color:#64ffda; margin-bottom:12px; }
+.summary-card ul { padding-left:20px; }
+.summary-card li { margin:4px 0; color:#aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>二次函数求最小值</h1>
+    <div class="video-section"><div class="no-video">动画视频暂未生成（需安装 Manim）<br>下方展示解题步骤</div></div>
+    <div class="steps-section">
+            <div class="step-card" data-step="0">
+                <div class="step-header">
+                    <span class="step-num">Step 1</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">同学们好，今天我们来求函数 f(x) = x² - 2x + 1 的最小值。这个函数看起来是一个二次函数，让我们先来识别它的特点。</p>
+                
+            </div>
+            <div class="step-card" data-step="1">
+                <div class="step-header">
+                    <span class="step-num">Step 2</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">现在我们用配方法来求最小值。将 x² - 2x 配成完全平方，加上再减去 1。</p>
+                <div class="formula">$$f(x) = (x^2 - 2x + 1) = (x - 1)^2$$</div>
+            </div>
+            <div class="step-card" data-step="2">
+                <div class="step-header">
+                    <span class="step-num">Step 3</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">配方完成，得到 f(x) = (x - 1)²。接下来我们画出这个函数的图像，直观看出最小值的位置。</p>
+                
+            </div>
+            <div class="step-card" data-step="3">
+                <div class="step-header">
+                    <span class="step-num">Step 4</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">从图像可以看出，这是一个开口向上的抛物线，顶点就是最低点。当 x = 1 时，(x - 1)² = 0，所以最小值是 0。</p>
+                
+            </div></div>
+    
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+{
+  "title": "三次函数的单调性与极值",
+  "topics": [
+    "导数应用",
+    "函数性质"
+  ],
+  "scenes": [
+    {
+      "scene_id": 1,
+      "title": "求导数并找临界点",
+      "speech": "我们先对函数 f(x) = x³ - 3x + 1 求导数，得到 f'(x) = 3x² - 3 = 3(x² - 1)。令导数为零，解出 x = -1 和 x = 1 这两个临界点。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "f(x) = x^3 - 3x + 1",
+          "color": "white",
+          "position": "up"
+        },
+        {
+          "type": "write_tex",
+          "tex": "f'(x) = 3x^2 - 3 = 3(x^2 - 1) = 3(x+1)(x-1)",
+          "color": "yellow"
+        },
+        {
+          "type": "write_tex",
+          "tex": "f'(x) = 0 \\Rightarrow x = -1 \\text{ 或 } x = 1",
+          "color": "green"
+        }
+      ]
+    },
+    {
+      "scene_id": 2,
+      "title": "分析导数符号确定单调性",
+      "speech": "接下来分析导数在各区间的符号。当 x < -1 时，(x+1)(x-1) > 0，导数大于零，函数单调递增。当 -1 < x < 1 时，乘积小于零，导数小于零，函数单调递减。当 x > 1 时，导数又大于零，函数单调递增。",
+      "instructions": [
+        {
+          "type": "draw_number_line",
+          "range": [
+            -2,
+            2
+          ],
+          "marks": [
+            -1,
+            1
+          ],
+          "signs": [
+            "+",
+            "-",
+            "+"
+          ]
+        },
+        {
+          "type": "write_tex",
+          "tex": "x < -1: f'(x) > 0 \\Rightarrow \\text{单调递增}",
+          "color": "green"
+        },
+        {
+          "type": "write_tex",
+          "tex": "-1 < x < 1: f'(x) < 0 \\Rightarrow \\text{单调递减}",
+          "color": "red"
+        },
+        {
+          "type": "write_tex",
+          "tex": "x > 1: f'(x) > 0 \\Rightarrow \\text{单调递增}",
+          "color": "green"
+        }
+      ]
+    },
+    {
+      "scene_id": 3,
+      "title": "求极值",
+      "speech": "现在计算极值点处的函数值。在 x = -1 处，f(-1) = 3，这是极大值。在 x = 1 处，f(1) = -1，这是极小值。",
+      "instructions": [
+        {
+          "type": "draw_axes",
+          "x_range": [
+            -3,
+            3
+          ],
+          "y_range": [
+            -2,
+            4
+          ]
+        },
+        {
+          "type": "plot_function",
+          "expr": "x**3 - 3*x + 1",
+          "color": "blue",
+          "x_range": [
+            -2.5,
+            2.5
+          ]
+        },
+        {
+          "type": "mark_point",
+          "x": -1,
+          "y": 3,
+          "label": "(-1, 3) 极大值",
+          "color": "green"
+        },
+        {
+          "type": "mark_point",
+          "x": 1,
+          "y": -1,
+          "label": "(1, -1) 极小值",
+          "color": "red"
+        }
+      ]
+    },
+    {
+      "scene_id": 4,
+      "title": "总结答案",
+      "speech": "最后我们总结一下结果：单调递增区间是 (-∞, -1) 和 (1, +∞)，单调递减区间是 (-1, 1)；极大值为 3，极小值为 -1。",
+      "instructions": [
+        {
+          "type": "write_tex",
+          "tex": "\\text{单调递增区间: } (-\\infty, -1) \\cup (1, +\\infty)",
+          "color": "green"
+        },
+        {
+          "type": "write_tex",
+          "tex": "\\text{单调递减区间: } (-1, 1)",
+          "color": "red"
+        },
+        {
+          "type": "write_tex",
+          "tex": "\\text{极大值: } f(-1) = 3",
+          "color": "yellow"
+        },
+        {
+          "type": "write_tex",
+          "tex": "\\text{极小值: } f(1) = -1",
+          "color": "yellow"
+        }
+      ]
+    }
+  ]
+}

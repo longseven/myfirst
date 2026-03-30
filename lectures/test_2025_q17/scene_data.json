@@ -1,0 +1,1163 @@
+{
+  "title": "四边形翻折与二面角问题",
+  "problem_html": "如图，在四边形$ABCD$中，<span class='t' data-el='ln_AB'>$AB \\parallel CD$</span>，<span class='t' data-el='angle_DAB'>$\\angle DAB=90^{\\circ}$</span>，$F$为$CD$的中点，点$E$在$AB$上，<span class='t' data-el='ln_EF'>$EF \\parallel AD$</span>，<span class='t' data-el='ln_AB'>$AB=3AD$</span>，<span class='t' data-el='ln_CD'>$CD=2AD$</span>，将四边形$EFDA$沿$EF$翻折至四边形$EFD'A'$，使得面$EFD'A'$与面$EFCB$所成的二面角为$60^{\\circ}$。",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "证明：<span class='t' data-el='ln_A_B'>$A'B \\parallel$</span>平面<span class='t' data-el='pl_CD_F'>$CD'F$</span>"
+    },
+    {
+      "label": "(2)",
+      "html": "求面<span class='t' data-el='pl_BCD'>$BCD'$</span>与面<span class='t' data-el='pl_EFD_A'>$EFD'A'$</span>所成的二面角的正弦值"
+    }
+  ],
+  "vertices": {
+    "E": [
+      0,
+      0,
+      0
+    ],
+    "F": [
+      0,
+      1,
+      0
+    ],
+    "B": [
+      2,
+      0,
+      0
+    ],
+    "C": [
+      1,
+      1,
+      0
+    ],
+    "A_prime": [
+      -0.5,
+      0,
+      0.8660254
+    ],
+    "D_prime": [
+      -0.5,
+      1,
+      0.8660254
+    ]
+  },
+  "vertex_styles": {
+    "E": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        -0.3,
+        -0.15,
+        0.2
+      ]
+    },
+    "F": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        0.3,
+        0.15,
+        0.2
+      ]
+    },
+    "B": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        0.3,
+        -0.15,
+        0.2
+      ]
+    },
+    "C": {
+      "color": "#64ffda",
+      "dot_hex": "0x64ffda",
+      "label_offset": [
+        0.3,
+        0.15,
+        0.2
+      ]
+    },
+    "A_prime": {
+      "color": "#ff6464",
+      "dot_hex": "0xff6464",
+      "label_offset": [
+        -0.5,
+        -0.15,
+        0.3
+      ]
+    },
+    "D_prime": {
+      "color": "#ff6464",
+      "dot_hex": "0xff6464",
+      "label_offset": [
+        -0.5,
+        0.15,
+        0.3
+      ]
+    }
+  },
+  "base_edges_solid": [
+    [
+      "E",
+      "F"
+    ],
+    [
+      "E",
+      "B"
+    ],
+    [
+      "F",
+      "C"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "E",
+      "A_prime"
+    ],
+    [
+      "A_prime",
+      "D_prime"
+    ],
+    [
+      "D_prime",
+      "F"
+    ],
+    [
+      "A_prime",
+      "B"
+    ],
+    [
+      "C",
+      "D_prime"
+    ],
+    [
+      "B",
+      "D_prime"
+    ]
+  ],
+  "base_edges_dashed": [],
+  "base_edges_special": [
+    {
+      "from": "E",
+      "to": "F",
+      "color": "0xff4444",
+      "width": 3
+    }
+  ],
+  "base_face_vertices": [
+    "E",
+    "B",
+    "C",
+    "F"
+  ],
+  "right_angles": [
+    {
+      "vertex": "E",
+      "dir1_toward": "B",
+      "dir2_toward": "F",
+      "color": "0xff4444"
+    }
+  ],
+  "lines": [
+    {
+      "id": "ln_EF",
+      "from": "E",
+      "to": "F",
+      "color": "0xff4444",
+      "dashed": false
+    },
+    {
+      "id": "ln_EB",
+      "from": "E",
+      "to": "B",
+      "color": "0x44ff44",
+      "dashed": false
+    },
+    {
+      "id": "ln_FC",
+      "from": "F",
+      "to": "C",
+      "color": "0x44ff44",
+      "dashed": false
+    },
+    {
+      "id": "ln_BC",
+      "from": "B",
+      "to": "C",
+      "color": "0x44ff44",
+      "dashed": false
+    },
+    {
+      "id": "ln_EA_prime",
+      "from": "E",
+      "to": "A_prime",
+      "color": "0xff6464",
+      "dashed": false
+    },
+    {
+      "id": "ln_A_prime_D_prime",
+      "from": "A_prime",
+      "to": "D_prime",
+      "color": "0xff6464",
+      "dashed": false
+    },
+    {
+      "id": "ln_D_prime_F",
+      "from": "D_prime",
+      "to": "F",
+      "color": "0xff6464",
+      "dashed": false
+    },
+    {
+      "id": "ln_A_B",
+      "from": "A_prime",
+      "to": "B",
+      "color": "0xff8844",
+      "dashed": false
+    },
+    {
+      "id": "ln_CD_prime",
+      "from": "C",
+      "to": "D_prime",
+      "color": "0x8844ff",
+      "dashed": false
+    },
+    {
+      "id": "ln_BD_prime",
+      "from": "B",
+      "to": "D_prime",
+      "color": "0x8844ff",
+      "dashed": false
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_EFCB",
+      "vertices": [
+        "E",
+        "F",
+        "C",
+        "B"
+      ],
+      "color": "0x44ff44"
+    },
+    {
+      "id": "pl_EFD_A",
+      "vertices": [
+        "E",
+        "F",
+        "D_prime",
+        "A_prime"
+      ],
+      "color": "0xff6464"
+    },
+    {
+      "id": "pl_CD_F",
+      "vertices": [
+        "C",
+        "D_prime",
+        "F"
+      ],
+      "color": "0x8844ff"
+    },
+    {
+      "id": "pl_BCD",
+      "vertices": [
+        "B",
+        "C",
+        "D_prime"
+      ],
+      "color": "0xff8844"
+    }
+  ],
+  "coord_system": {
+    "origin": "E",
+    "axes": [
+      {
+        "direction": "EB",
+        "color": "0xff4444",
+        "label": "x",
+        "tjs_vector": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "direction": "EF",
+        "color": "0x44ff44",
+        "label": "y",
+        "tjs_vector": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "direction": "EA_prime",
+        "color": "0x4488ff",
+        "label": "z'",
+        "tjs_vector": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "length": 2.5,
+    "origin_label": "E(0,0,0)",
+    "coord_labels": {
+      "E": "(0,0,0)",
+      "F": "(0,1,0)",
+      "B": "(2,0,0)",
+      "C": "(1,1,0)",
+      "A_prime": "(-1/2,0,√3/2)",
+      "D_prime": "(-1/2,1,√3/2)"
+    }
+  },
+  "vectors": [
+    {
+      "id": "vec_A_B",
+      "from": "A_prime",
+      "to": "B",
+      "color": "0xff8844",
+      "label": "→A'B"
+    },
+    {
+      "id": "vec_FD_prime",
+      "from": "F",
+      "to": "D_prime",
+      "color": "0x8844ff",
+      "label": "→FD'"
+    },
+    {
+      "id": "vec_FC",
+      "from": "F",
+      "to": "C",
+      "color": "0x44ff44",
+      "label": "→FC"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_CD_F",
+      "center_vertices": [
+        "C",
+        "D_prime",
+        "F"
+      ],
+      "math_direction": [
+        0,
+        1,
+        0
+      ],
+      "color": "0xaa66ff",
+      "label": "n₁",
+      "scale": 1.5
+    },
+    {
+      "id": "nrm_EFD_A",
+      "center_vertices": [
+        "E",
+        "F",
+        "D_prime"
+      ],
+      "math_direction": [
+        0.8660254,
+        0,
+        0.5
+      ],
+      "color": "0xffaa44",
+      "label": "n₂",
+      "scale": 1.5
+    },
+    {
+      "id": "nrm_BCD",
+      "center_vertices": [
+        "B",
+        "C",
+        "D_prime"
+      ],
+      "math_direction": [
+        0.8660254,
+        0.8660254,
+        1.5
+      ],
+      "color": "0x44aaff",
+      "label": "n₃",
+      "scale": 1.5
+    }
+  ],
+  "shapes": [],
+  "face_defs": [
+    {
+      "name": "EFCB",
+      "pts": [
+        "E",
+        "F",
+        "C",
+        "B"
+      ]
+    },
+    {
+      "name": "EFD'A'",
+      "pts": [
+        "E",
+        "F",
+        "D_prime",
+        "A_prime"
+      ]
+    },
+    {
+      "name": "CD'F",
+      "pts": [
+        "C",
+        "D_prime",
+        "F"
+      ]
+    },
+    {
+      "name": "BCD'",
+      "pts": [
+        "B",
+        "C",
+        "D_prime"
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "E",
+      "F"
+    ],
+    [
+      "E",
+      "B"
+    ],
+    [
+      "F",
+      "C"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "E",
+      "A_prime"
+    ],
+    [
+      "A_prime",
+      "D_prime"
+    ],
+    [
+      "D_prime",
+      "F"
+    ],
+    [
+      "A_prime",
+      "B"
+    ],
+    [
+      "C",
+      "D_prime"
+    ],
+    [
+      "B",
+      "D_prime"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "EFCB",
+      "pts": [
+        "E",
+        "F",
+        "C",
+        "B"
+      ]
+    },
+    {
+      "name": "EFD'A'",
+      "pts": [
+        "E",
+        "F",
+        "D_prime",
+        "A_prime"
+      ]
+    },
+    {
+      "name": "CD'F",
+      "pts": [
+        "C",
+        "D_prime",
+        "F"
+      ]
+    },
+    {
+      "name": "BCD'",
+      "pts": [
+        "B",
+        "C",
+        "D_prime"
+      ]
+    }
+  ],
+  "detail_rules": [
+    {
+      "condition": {
+        "all": [
+          "ln_A_B",
+          "pl_CD_F"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "验证 A'B∥平面 CD'F："
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{A'B}=(\\frac{5}{2},0,-\\frac{\\sqrt{3}}{2})"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_1}=(0,1,0)"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{A'B} \\cdot \\vec{n_1} = 0"
+        }
+      ]
+    },
+    {
+      "condition": {
+        "all": [
+          "pl_EFD_A",
+          "pl_BCD"
+        ]
+      },
+      "content": [
+        {
+          "type": "desc",
+          "v": "计算二面角："
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_2}=(\\frac{\\sqrt{3}}{2},0,\\frac{1}{2})"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_3}=(\\frac{\\sqrt{3}}{2},\\frac{\\sqrt{3}}{2},\\frac{3}{2})"
+        },
+        {
+          "type": "tex",
+          "v": "\\cos\\alpha=\\frac{|\\vec{n_2}\\cdot\\vec{n_3}|}{|\\vec{n_2}||\\vec{n_3}|}=\\frac{\\sqrt{15}}{5}"
+        },
+        {
+          "type": "tex",
+          "v": "\\sin\\alpha=\\frac{\\sqrt{10}}{5}"
+        }
+      ]
+    }
+  ],
+  "sticky_elements": [
+    "coord_axes",
+    "coord_labels"
+  ],
+  "initial_camera": {
+    "position": [
+      4,
+      3,
+      5
+    ],
+    "target": [
+      0.5,
+      0.5,
+      0.3
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "同学们，我们来看这道立体几何翻折问题。题目给出了一个四边形，里面有平行关系和垂直关系。",
+      "els": [
+        "ln_EF",
+        "ln_EB",
+        "ln_FC",
+        "ln_BC"
+      ],
+      "cam": [
+        1.2,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "已知条件梳理"
+        },
+        {
+          "type": "tex",
+          "v": "AB \\parallel CD, \\angle DAB=90^{\\circ}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "关键条件是 EF 平行于 AD，AB 等于三倍 AD，CD 等于两倍 AD。F 是 CD 的中点。",
+      "els": [
+        "ln_EF",
+        "pl_EFCB"
+      ],
+      "cam": [
+        1.1,
+        -0.6,
+        13,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "AB=3AD, CD=2AD"
+        },
+        {
+          "type": "tex",
+          "v": "EF \\parallel AD"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "最重要的是翻折操作：把四边形 EFDA 沿着 EF 翻折，形成一个新的空间图形，二面角是六十度。",
+      "els": [
+        "ln_EA_prime",
+        "ln_A_prime_D_prime",
+        "ln_D_prime_F",
+        "pl_EFD_A"
+      ],
+      "cam": [
+        1.0,
+        -0.4,
+        11,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "翻折后形成空间图形"
+        },
+        {
+          "type": "tex",
+          "v": "\\text{二面角}=60^{\\circ}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "审题",
+      "speech": "第一问要证明 A'B 平行于平面 CD'F，第二问求两个平面所成二面角的正弦值。",
+      "els": [
+        "ln_A_B",
+        "pl_CD_F",
+        "pl_BCD"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "求证与求解目标"
+        },
+        {
+          "type": "tex",
+          "v": "(1)\\ A'B \\parallel \\text{平面}CD'F"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "现在我们来建立空间直角坐标系。设 AD 等于一，这样可以简化计算。",
+      "els": [
+        "coord_axes"
+      ],
+      "cam": [
+        0.8,
+        -0.3,
+        10,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "设 AD=1"
+        },
+        {
+          "type": "tex",
+          "v": "AB=3, CD=2, EF=1"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "以 E 为原点，EB 方向为 x 轴，EF 方向为 y 轴，建立坐标系。这样各点坐标就很清晰了。",
+      "els": [
+        "coord_labels"
+      ],
+      "cam": [
+        0.7,
+        -0.2,
+        9,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "各点坐标"
+        },
+        {
+          "type": "tex",
+          "v": "E(0,0,0), F(0,1,0), B(2,0,0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "第一问要证明线面平行。我们先写出翻折后 A'和 D'的坐标，它们绕 EF 轴旋转了六十度。",
+      "els": [
+        "ln_EA_prime",
+        "ln_A_prime_D_prime"
+      ],
+      "cam": [
+        0.9,
+        -0.4,
+        11,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "A'(-\\frac{1}{2},0,\\frac{\\sqrt{3}}{2})"
+        },
+        {
+          "type": "tex",
+          "v": "D'(-\\frac{1}{2},1,\\frac{\\sqrt{3}}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "接下来求向量 A'B。用 B 点坐标减去 A'点坐标，得到这个向量的三个分量。",
+      "els": [
+        "ln_A_B",
+        "vec_A_B"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "计算向量 A'B"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{A'B}=(\\frac{5}{2},0,-\\frac{\\sqrt{3}}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "现在求平面 CD'F 的法向量。我们取平面内的两个向量 FD'和 FC。",
+      "els": [
+        "pl_CD_F",
+        "vec_FD_prime",
+        "vec_FC"
+      ],
+      "cam": [
+        1.1,
+        -0.6,
+        13,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{FD'}=(-\\frac{1}{2},0,\\frac{\\sqrt{3}}{2})"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{FC}=(1,0,0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "用叉乘求法向量。这两个向量的叉乘结果就是平面的法向量方向。",
+      "els": [
+        "nrm_CD_F"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "平面 CD'F 的法向量"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_1}=\\overrightarrow{FD'}\\times\\overrightarrow{FC}=(0,1,0)"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "验证线面平行的条件：向量 A'B 与法向量垂直，也就是它们的点积等于零。",
+      "els": [
+        "ln_A_B",
+        "nrm_CD_F"
+      ],
+      "cam": [
+        0.9,
+        -0.4,
+        11,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{A'B}\\cdot\\vec{n_1}=0"
+        },
+        {
+          "type": "desc",
+          "v": "A'B 垂直于法向量"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "最后确认 A'点不在平面 CD'F 上。A'的 y 坐标是零，而平面上三点的 y 坐标都是一。",
+      "els": [
+        "pl_CD_F",
+        "ln_A_B"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "A'不在平面 CD'F 上"
+        },
+        {
+          "type": "tex",
+          "v": "A'_y=0, \\text{平面}CD'F:y=1"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (1) 题",
+      "speech": "综上，A'B 平行于平面 CD'F。第一问得证。",
+      "els": [
+        "ln_A_B",
+        "pl_CD_F"
+      ],
+      "cam": [
+        1.1,
+        -0.6,
+        13,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "结论"
+        },
+        {
+          "type": "tex",
+          "v": "\\therefore A'B \\parallel \\text{平面}CD'F"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "第二问求二面角。先求平面 EFD'A'的法向量，取平面内的向量 EF 和 EA'。",
+      "els": [
+        "pl_EFD_A",
+        "nrm_EFD_A"
+      ],
+      "cam": [
+        0.8,
+        -0.3,
+        10,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{EF}=(0,1,0)"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{EA'}=(-\\frac{1}{2},0,\\frac{\\sqrt{3}}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "计算叉乘得到法向量 n 二。这个向量垂直于平面 EFD'A'。",
+      "els": [
+        "nrm_EFD_A"
+      ],
+      "cam": [
+        0.9,
+        -0.4,
+        11,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "平面 EFD'A'的法向量"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_2}=(\\frac{\\sqrt{3}}{2},0,\\frac{1}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "再求平面 BCD'的法向量。取平面内的向量 BC 和 BD'。",
+      "els": [
+        "pl_BCD",
+        "nrm_BCD"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{BC}=(-1,1,0)"
+        },
+        {
+          "type": "tex",
+          "v": "\\overrightarrow{BD'}=(-\\frac{5}{2},1,\\frac{\\sqrt{3}}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "计算叉乘得到法向量 n 三。现在两个平面的法向量都有了。",
+      "els": [
+        "nrm_BCD"
+      ],
+      "cam": [
+        0.9,
+        -0.4,
+        11,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "平面 BCD'的法向量"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{n_3}=(\\frac{\\sqrt{3}}{2},\\frac{\\sqrt{3}}{2},\\frac{3}{2})"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "用两个法向量的夹角公式求余弦值。先算点积，再算各自的模长。",
+      "els": [
+        "nrm_EFD_A",
+        "nrm_BCD"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "tex",
+          "v": "\\vec{n_2}\\cdot\\vec{n_3}=\\frac{3}{2}"
+        },
+        {
+          "type": "tex",
+          "v": "|\\vec{n_2}|=1, |\\vec{n_3}|=\\frac{\\sqrt{15}}{2}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "代入公式计算余弦值，结果是根号十五除以五。",
+      "els": [
+        "nrm_EFD_A",
+        "nrm_BCD"
+      ],
+      "cam": [
+        1.1,
+        -0.6,
+        13,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "二面角余弦值"
+        },
+        {
+          "type": "tex",
+          "v": "\\cos\\alpha=\\frac{\\sqrt{15}}{5}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "第 (2) 题",
+      "speech": "最后用同角三角函数关系求正弦值。一减去余弦平方再开根号。",
+      "els": [
+        "pl_EFD_A",
+        "pl_BCD"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "二面角正弦值"
+        },
+        {
+          "type": "tex",
+          "v": "\\sin\\alpha=\\sqrt{1-\\cos^2\\alpha}=\\frac{\\sqrt{10}}{5}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "总结一下，这道题的关键是建立合适的坐标系，准确写出各点坐标。",
+      "els": [
+        "coord_axes",
+        "coord_labels"
+      ],
+      "cam": [
+        0.8,
+        -0.3,
+        10,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "解题要点"
+        },
+        {
+          "type": "tex",
+          "v": "\\text{坐标法解决立体几何}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "线面平行用向量与法向量垂直来证，二面角用两个法向量的夹角公式来求。",
+      "els": [
+        "ln_A_B",
+        "pl_CD_F",
+        "pl_EFD_A",
+        "pl_BCD"
+      ],
+      "cam": [
+        1.0,
+        -0.5,
+        12,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "核心方法"
+        },
+        {
+          "type": "tex",
+          "v": "\\vec{a}\\cdot\\vec{n}=0 \\Rightarrow \\text{线面平行}"
+        }
+      ],
+      "clear": false
+    },
+    {
+      "phase": "总结",
+      "speech": "同学们要熟练掌握空间向量的运算，这是解决立体几何问题的有力工具。今天的课就到这里。",
+      "els": [],
+      "cam": [
+        1.2,
+        -0.7,
+        14,
+        2000
+      ],
+      "math": [
+        {
+          "type": "desc",
+          "v": "课后练习"
+        },
+        {
+          "type": "tex",
+          "v": "\\text{完成相关练习题}"
+        }
+      ],
+      "clear": true
+    }
+  ]
+}

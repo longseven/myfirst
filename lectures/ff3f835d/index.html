@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学讲解</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, 'PingFang SC', sans-serif; background:#0a0a0f; color:#e0e0e0; }
+.container { max-width:1200px; margin:0 auto; padding:20px; }
+h1 { font-size:1.5rem; color:#64ffda; margin-bottom:20px; text-align:center; }
+.video-section { background:#111; border-radius:12px; overflow:hidden; margin-bottom:24px; }
+video { width:100%; display:block; }
+.no-video { padding:60px 20px; text-align:center; color:#666; font-size:1.1rem; line-height:1.8; }
+.steps-section { display:grid; gap:16px; }
+.step-card { background:#1a1a2e; border-radius:10px; padding:16px 20px; border-left:3px solid #333; transition:border-color .2s; }
+.step-card:hover { border-left-color:#64ffda; }
+.step-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.step-num { background:#64ffda; color:#0a0a0f; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px; }
+.step-phase { color:#888; font-size:0.85rem; }
+.step-speech { font-size:0.95rem; line-height:1.6; color:#ccc; }
+.formula { margin:8px 0; padding:8px 12px; background:#111; border-radius:6px; overflow-x:auto; }
+.summary-card { background:#1a2a1a; border:1px solid #2a4a2a; border-radius:10px; padding:20px; margin-top:24px; }
+.summary-card h3 { color:#64ffda; margin-bottom:12px; }
+.summary-card ul { padding-left:20px; }
+.summary-card li { margin:4px 0; color:#aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>数学讲解</h1>
+    <div class="video-section"><div class="no-video">动画视频暂未生成（需安装 Manim）<br>下方展示解题步骤</div></div>
+    <div class="steps-section">
+            <div class="step-card" data-step="0">
+                <div class="step-header">
+                    <span class="step-num">Step 1</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">今天我们来求二次函数 f(x) = 2x² - 8x + 5 的顶点。顶点是二次函数图像的最高点或最低点。</p>
+                <div class="formula">$$f(x) = 2x^2 - 8x + 5$$</div>
+            </div>
+            <div class="step-card" data-step="1">
+                <div class="step-header">
+                    <span class="step-num">Step 2</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">我们先画出这个二次函数的图像，观察顶点的位置。</p>
+                
+            </div>
+            <div class="step-card" data-step="2">
+                <div class="step-header">
+                    <span class="step-num">Step 3</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">使用配方法求顶点。先提取二次项系数：f(x) = 2(x² - 4x) + 5</p>
+                <div class="formula">$$f(x) = 2(x^2 - 4x) + 5$$</div>
+            </div>
+            <div class="step-card" data-step="3">
+                <div class="step-header">
+                    <span class="step-num">Step 4</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">对括号内配方：(x² - 4x + 4) - 4 = (x - 2)² - 4</p>
+                <div class="formula">$$f(x) = 2[(x-2)^2 - 4] + 5$$</div>
+            </div>
+            <div class="step-card" data-step="4">
+                <div class="step-header">
+                    <span class="step-num">Step 5</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">展开化简：2(x-2)² - 8 + 5 = 2(x-2)² - 3</p>
+                <div class="formula">$$f(x) = 2(x-2)^2 - 3$$</div>
+            </div>
+            <div class="step-card" data-step="5">
+                <div class="step-header">
+                    <span class="step-num">Step 6</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">也可以直接用顶点公式：x = -b/(2a) = -(-8)/(2×2) = 2，代入求 y 值。</p>
+                <div class="formula">$$x_{vertex} = -\frac{b}{2a} = -\frac{-8}{2\times2} = 2$$</div><div class="formula">$$y_{vertex} = 2(2)^2 - 8(2) + 5 = -3$$</div>
+            </div>
+            <div class="step-card" data-step="6">
+                <div class="step-header">
+                    <span class="step-num">Step 7</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">在图像上标注顶点 (2, -3)。</p>
+                
+            </div>
+            <div class="step-card" data-step="7">
+                <div class="step-header">
+                    <span class="step-num">Step 8</span>
+                    <span class="step-phase"></span>
+                </div>
+                <p class="step-speech">二次函数 f(x) = 2x² - 8x + 5 的顶点是 (2, -3)。由于 a = 2 > 0，所以这是开口向上的抛物线，顶点是最小值点。</p>
+                <div class="formula">$$Vertex = (2, -3)$$</div>
+            </div></div>
+    
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+        ]
+    });
+});
+</script>
+</body>
+</html>

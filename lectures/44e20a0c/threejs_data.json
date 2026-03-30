@@ -1,0 +1,432 @@
+{
+  "title": "四面体体积计算",
+  "problem_html": "在四面体 P-ABC 中，PA ⊥ 平面 ABC，已知底面三角形 ABC 的面积为 S，PA 的长度为 h，求四面体的体积 V。",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "求证：<span class='t' data-el='vec_PA'>PA</span> 垂直于 <span class='t' data-el='pl_ABC'>平面 ABC</span>"
+    },
+    {
+      "label": "(2)",
+      "html": "求四面体的体积 <span class='t' data-el='vec_V'>V</span>"
+    }
+  ],
+  "vertices": {
+    "A": [
+      0,
+      0,
+      0
+    ],
+    "B": [
+      3,
+      0,
+      0
+    ],
+    "C": [
+      0,
+      4,
+      0
+    ],
+    "P": [
+      0,
+      0,
+      5
+    ]
+  },
+  "vertex_styles": {
+    "A": {
+      "label": "A",
+      "position": "below"
+    },
+    "B": {
+      "label": "B",
+      "position": "right"
+    },
+    "C": {
+      "label": "C",
+      "position": "left"
+    },
+    "P": {
+      "label": "P",
+      "position": "above"
+    }
+  },
+  "base_edges_solid": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "A"
+    ]
+  ],
+  "base_edges_dashed": [],
+  "base_edges_special": [
+    {
+      "from": "P",
+      "to": "A",
+      "color": "0xff4444",
+      "width": 3
+    }
+  ],
+  "base_face_vertices": [
+    "A",
+    "B",
+    "C"
+  ],
+  "right_angles": [
+    {
+      "vertex": "A",
+      "dir1_toward": "P",
+      "dir2_toward": "B",
+      "color": "0x00ff00"
+    }
+  ],
+  "lines": [
+    {
+      "id": "ln_PA",
+      "from": "P",
+      "to": "A"
+    },
+    {
+      "id": "ln_PB",
+      "from": "P",
+      "to": "B"
+    },
+    {
+      "id": "ln_PC",
+      "from": "P",
+      "to": "C"
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_ABC",
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "color": "0x4488ff",
+      "opacity": 0.3
+    }
+  ],
+  "coord_system": {
+    "origin": "A",
+    "axes": [
+      "x",
+      "y",
+      "z"
+    ]
+  },
+  "vectors": [
+    {
+      "id": "vec_PA",
+      "from": "A",
+      "to": "P"
+    },
+    {
+      "id": "vec_AB",
+      "from": "A",
+      "to": "B"
+    },
+    {
+      "id": "vec_AC",
+      "from": "A",
+      "to": "C"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_ABC",
+      "center_vertices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "length": 3
+    }
+  ],
+  "shapes": [],
+  "face_defs": [
+    {
+      "name": "ABC",
+      "pts": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAB",
+      "pts": [
+        "P",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAC",
+      "pts": [
+        "P",
+        "A",
+        "C"
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "A"
+    ],
+    [
+      "A",
+      "P"
+    ],
+    [
+      "B",
+      "P"
+    ],
+    [
+      "C",
+      "P"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "ABC",
+      "pts": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAB",
+      "pts": [
+        "P",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAC",
+      "pts": [
+        "P",
+        "A",
+        "C"
+      ]
+    }
+  ],
+  "detail_rules": [],
+  "sticky_elements": [
+    "coord_axes"
+  ],
+  "initial_camera": {
+    "position": [
+      6,
+      5,
+      7
+    ],
+    "target": [
+      1,
+      0.5,
+      1
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "已知 PA 垂直于平面 ABC，这是解题的关键信息，说明 PA 是四面体的高。",
+      "els": [
+        "ln_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "以 A 为原点建立坐标系，令平面 ABC 为 xy 平面，则 P 在 z 轴上。",
+      "els": [
+        "coord_axes"
+      ],
+      "cam": {
+        "position": [
+          8,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "phase": "标记关键量",
+      "speech": "设底面三角形 ABC 的面积为 S，PA 的长度为 h，这些都是已知量或待求量。",
+      "els": [
+        "vec_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          5,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "分析几何关系",
+      "speech": "因为 PA 垂直于平面 ABC，所以 PA 垂直于底面内任意直线，包括 AB 和 AC。",
+      "els": [
+        "vec_PA",
+        "vec_AB",
+        "vec_AC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "展示垂直关系",
+      "speech": "从动画中可以看到 PA 与底面内的任意方向都保持垂直，这是由给定条件保证的。",
+      "els": [
+        "right_angles"
+      ],
+      "cam": {
+        "position": [
+          7,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "phase": "确定体积公式",
+      "speech": "四面体体积公式是 V = 一半的底面积乘以高，即底面 ABC 面积乘以 PA 长度再除以三。",
+      "els": [
+        "pl_ABC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "代入具体数值",
+      "speech": "以 AB=3, AC=4 为例，底面直角三角形面积为 6，PA=5。",
+      "els": [
+        "vec_AB",
+        "vec_AC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          5,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "计算具体结果",
+      "speech": "体积 V = 三分之一乘以 6 乘以 5 = 10，这就是该四面体的体积。",
+      "els": [
+        "ln_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "从另一视角观察",
+      "speech": "换一个角度看，四面体的四个面都清晰可见，结构非常规整。",
+      "els": [
+        "all_planes"
+      ],
+      "cam": {
+        "position": [
+          4,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "phase": "演示体积构成",
+      "speech": "想象以底面 ABC 为基准，PA 作为高度，四面体的体积就是这个直三棱锥的体积。",
+      "els": [
+        "pl_ABC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          7,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "总结方法",
+      "speech": "本题的核心是利用 PA 垂直于底面这一条件，将 PA 作为四面体的高来计算体积。",
+      "els": [
+        "vec_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    }
+  ]
+}

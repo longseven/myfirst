@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D讲解</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;color:#e0e0e0;font-family:'PingFang SC','Microsoft YaHei',sans-serif;overflow:hidden}
+#c{position:absolute;top:0;left:0;width:100vw;height:100vh;cursor:grab}
+#c:active{cursor:grabbing}
+canvas{display:block}
+
+/* ---- left problem reader ---- */
+#reader{
+  position:absolute;top:12px;left:12px;width:260px;
+  background:rgba(12,16,32,0.94);border:1px solid rgba(100,140,255,0.2);
+  border-radius:10px;backdrop-filter:blur(12px);overflow:hidden;
+  max-height:calc(100vh - 24px);overflow-y:auto;
+}
+#reader::-webkit-scrollbar{width:3px}
+#reader::-webkit-scrollbar-thumb{background:rgba(91,141,239,0.3);border-radius:2px}
+.rd-title{font-size:13px;font-weight:600;color:#7eb8ff;padding:10px 14px 6px;border-bottom:1px solid rgba(100,140,255,0.1)}
+.rd-body{padding:8px 14px 12px;font-size:13px;line-height:2;color:#99aabb}
+.rd-q{font-size:12px;font-weight:600;color:#7eb8ff;margin:10px 0 4px;padding-top:6px;border-top:1px solid rgba(100,140,255,0.1)}
+/* clickable term */
+.t{
+  cursor:pointer;padding:1px 4px;border-radius:3px;
+  transition:all .15s;border-bottom:1.5px dashed transparent;
+  white-space:nowrap;
+}
+.t:hover{background:rgba(80,140,255,0.15);border-bottom-color:rgba(100,180,255,0.4)}
+.t.on{background:rgba(50,220,140,0.15);border-bottom-color:rgba(50,220,140,0.5);color:#eef}
+.t.reading{background:rgba(255,200,60,0.3);border-bottom-color:rgba(255,200,60,0.6);color:#ffe;animation:readPulse 1s ease infinite}
+@keyframes readPulse{0%,100%{background:rgba(255,200,60,0.25)}50%{background:rgba(255,200,60,0.45)}}
+
+/* ---- aux line toolbar ---- */
+.aux-bar{display:flex;gap:6px;padding:8px 14px;border-top:1px solid rgba(100,140,255,0.1)}
+.aux-btn{
+  padding:5px 12px;font-size:11px;border:1px solid rgba(100,180,255,0.25);
+  border-radius:5px;cursor:pointer;color:#7799aa;
+  background:rgba(20,30,50,0.6);transition:all .15s;
+}
+.aux-btn:hover{background:rgba(40,60,100,0.5);color:#aabbdd}
+.aux-btn.active{background:rgba(50,180,120,0.2);border-color:rgba(50,220,140,0.4);color:#44ddaa}
+#aux-status{font-size:10px;color:#55aa77;padding:2px 14px 6px;display:none}
+
+/* ---- play bar ---- */
+.play-bar{display:flex;gap:6px;padding:8px 14px;border-top:1px solid rgba(100,140,255,0.1)}
+.play-btn{
+  flex:1;padding:6px 0;font-size:12px;text-align:center;
+  border:1px solid rgba(100,180,255,0.25);border-radius:5px;cursor:pointer;
+  color:#7799aa;background:rgba(20,30,50,0.6);transition:all .15s;
+}
+.play-btn:hover{background:rgba(40,60,100,0.5);color:#aabbdd}
+.play-btn.active{background:rgba(80,140,255,0.2);border-color:rgba(80,180,255,0.4);color:#88ccff}
+#anim-progress{
+  display:none;margin:0 14px 6px;position:relative;
+}
+#anim-track{
+  width:100%;height:6px;background:rgba(100,140,255,0.15);border-radius:3px;cursor:pointer;position:relative;
+}
+#anim-bar{height:100%;width:0%;background:linear-gradient(90deg,#5b8def,#44ddaa);border-radius:3px;pointer-events:none;transition:none}
+#anim-thumb{
+  position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
+  background:#5b8def;border:2px solid #fff;transform:translate(-50%,-50%);
+  cursor:grab;left:0%;transition:none;box-shadow:0 0 6px rgba(91,141,239,0.5);
+}
+#anim-thumb:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2)}
+#step-info{font-size:10px;color:#556677;text-align:center;margin:4px 0 0;user-select:none}
+.step-nav{display:flex;justify-content:center;gap:8px;margin:2px 14px 4px}
+.step-nav button{
+  background:rgba(40,60,100,0.4);border:1px solid rgba(100,140,255,0.2);
+  color:#7799aa;font-size:11px;padding:3px 10px;border-radius:4px;cursor:pointer;
+}
+.step-nav button:hover{background:rgba(60,90,140,0.5);color:#aabbdd}
+
+/* ---- right detail / solution panel ---- */
+#detail{
+  position:absolute;top:12px;right:12px;width:320px;
+  background:rgba(12,16,32,0.94);border:1px solid rgba(100,140,255,0.2);
+  border-radius:10px;backdrop-filter:blur(12px);overflow:hidden;
+  max-height:calc(100vh - 24px);overflow-y:auto;
+}
+#detail::-webkit-scrollbar{width:3px}
+#detail::-webkit-scrollbar-thumb{background:rgba(91,141,239,0.3);border-radius:2px}
+#detail-title{font-size:13px;font-weight:600;color:#7eb8ff;padding:10px 14px;border-bottom:1px solid rgba(100,140,255,0.1)}
+#detail-body{padding:10px 14px}
+.math-block{background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 10px;margin:6px 0;line-height:1.8}
+.math-block .katex{font-size:13px}
+.desc{font-size:12px;color:#8899aa;line-height:1.6;margin:4px 0}
+.result{color:#44dd88;font-weight:600;font-size:13px;margin:6px 0}
+/* solution step cards */
+.sol-step{
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s ease,transform .5s ease;
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:1px solid rgba(100,140,255,0.06);
+}
+.sol-step.visible{opacity:1;transform:translateY(0)}
+.sol-step.active{border-left:2px solid #5b8def;padding-left:10px}
+.sol-phase{font-size:11px;font-weight:700;color:#5b8def;margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.sol-phase:first-child{margin-top:0}
+
+#tooltip{
+  position:absolute;pointer-events:none;display:none;
+  background:rgba(12,16,32,0.95);border:1px solid rgba(100,180,255,0.4);
+  border-radius:6px;padding:5px 10px;font-size:11px;color:#aaccee;
+  white-space:nowrap;z-index:10;
+}
+#info-bar{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  background:rgba(12,16,32,0.85);border:1px solid rgba(100,140,255,0.15);
+  border-radius:8px;padding:7px 16px;font-size:11px;color:#556677;
+}
+</style>
+</head>
+<body>
+<div id="c"></div>
+<div id="tooltip"></div>
+
+<!-- PROBLEM READER -->
+<div id="reader">
+  <div class="rd-title" id="rd-title"></div>
+  <div class="rd-body" id="rd-body"></div>
+  <div class="aux-bar">
+    <button class="aux-btn" id="btn-aux">画辅助线</button>
+    <button class="aux-btn" id="btn-perp">作垂线</button>
+    <button class="aux-btn" id="btn-aux-clear">清除辅助线</button>
+  </div>
+  <div id="aux-status"></div>
+  <div class="play-bar">
+    <button class="play-btn" id="btn-solve">▶ 讲解演示</button>
+    <button class="play-btn" id="btn-reset">↺ 重置</button>
+  </div>
+  <div id="anim-progress">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="time-cur" style="font-size:11px;color:#7799aa;min-width:38px;text-align:right">0:00</span>
+      <div id="anim-track" style="flex:1"><div id="anim-bar"></div><div id="anim-thumb"></div></div>
+      <span id="time-total" style="font-size:11px;color:#7799aa;min-width:38px">0:00</span>
+    </div>
+    <div id="step-info"></div>
+  </div>
+  <div class="step-nav" id="step-nav" style="display:none">
+    <button id="btn-prev">⏮ 上一步</button>
+    <button id="btn-next">下一步 ⏭</button>
+  </div>
+</div>
+<div id="detail">
+  <div id="detail-title">详情</div>
+  <div id="detail-body"></div>
+</div>
+
+<div id="info-bar">拖拽旋转 · 滚轮缩放 · 点击题目中高亮文字展示对应图形元素</div>
+
+<script>
+window.sceneData = {
+  "title": "四面体体积计算",
+  "problem_html": "在四面体 P-ABC 中，PA ⊥ 平面 ABC，已知底面三角形 ABC 的面积为 S，PA 的长度为 h，求四面体的体积 V。",
+  "questions": [
+    {
+      "label": "(1)",
+      "html": "求证：<span class='t' data-el='vec_PA'>PA</span> 垂直于 <span class='t' data-el='pl_ABC'>平面 ABC</span>"
+    },
+    {
+      "label": "(2)",
+      "html": "求四面体的体积 <span class='t' data-el='vec_V'>V</span>"
+    }
+  ],
+  "vertices": {
+    "A": [
+      0,
+      0,
+      0
+    ],
+    "B": [
+      3,
+      0,
+      0
+    ],
+    "C": [
+      0,
+      4,
+      0
+    ],
+    "P": [
+      0,
+      0,
+      5
+    ]
+  },
+  "vertex_styles": {
+    "A": {
+      "label": "A",
+      "position": "below"
+    },
+    "B": {
+      "label": "B",
+      "position": "right"
+    },
+    "C": {
+      "label": "C",
+      "position": "left"
+    },
+    "P": {
+      "label": "P",
+      "position": "above"
+    }
+  },
+  "base_edges_solid": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "A"
+    ]
+  ],
+  "base_edges_dashed": [],
+  "base_edges_special": [
+    {
+      "from": "P",
+      "to": "A",
+      "color": "0xff4444",
+      "width": 3
+    }
+  ],
+  "base_face_vertices": [
+    "A",
+    "B",
+    "C"
+  ],
+  "right_angles": [
+    {
+      "vertex": "A",
+      "dir1_toward": "P",
+      "dir2_toward": "B",
+      "color": "0x00ff00"
+    }
+  ],
+  "lines": [
+    {
+      "id": "ln_PA",
+      "from": "P",
+      "to": "A"
+    },
+    {
+      "id": "ln_PB",
+      "from": "P",
+      "to": "B"
+    },
+    {
+      "id": "ln_PC",
+      "from": "P",
+      "to": "C"
+    }
+  ],
+  "planes": [
+    {
+      "id": "pl_ABC",
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "color": "0x4488ff",
+      "opacity": 0.3
+    }
+  ],
+  "coord_system": {
+    "origin": "A",
+    "axes": [
+      "x",
+      "y",
+      "z"
+    ]
+  },
+  "vectors": [
+    {
+      "id": "vec_PA",
+      "from": "A",
+      "to": "P"
+    },
+    {
+      "id": "vec_AB",
+      "from": "A",
+      "to": "B"
+    },
+    {
+      "id": "vec_AC",
+      "from": "A",
+      "to": "C"
+    }
+  ],
+  "normals": [
+    {
+      "id": "nrm_ABC",
+      "center_vertices": [
+        "A",
+        "B",
+        "C"
+      ],
+      "length": 3
+    }
+  ],
+  "shapes": [],
+  "face_defs": [
+    {
+      "name": "ABC",
+      "pts": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAB",
+      "pts": [
+        "P",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAC",
+      "pts": [
+        "P",
+        "A",
+        "C"
+      ]
+    }
+  ],
+  "all_edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "C",
+      "A"
+    ],
+    [
+      "A",
+      "P"
+    ],
+    [
+      "B",
+      "P"
+    ],
+    [
+      "C",
+      "P"
+    ]
+  ],
+  "all_planes": [
+    {
+      "name": "ABC",
+      "pts": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAB",
+      "pts": [
+        "P",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "PBC",
+      "pts": [
+        "P",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "name": "PAC",
+      "pts": [
+        "P",
+        "A",
+        "C"
+      ]
+    }
+  ],
+  "detail_rules": [],
+  "sticky_elements": [
+    "coord_axes"
+  ],
+  "initial_camera": {
+    "position": [
+      6,
+      5,
+      7
+    ],
+    "target": [
+      1,
+      0.5,
+      1
+    ]
+  },
+  "solution_script": [
+    {
+      "phase": "审题",
+      "speech": "已知 PA 垂直于平面 ABC，这是解题的关键信息，说明 PA 是四面体的高。",
+      "els": [
+        "ln_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "建立坐标系",
+      "speech": "以 A 为原点建立坐标系，令平面 ABC 为 xy 平面，则 P 在 z 轴上。",
+      "els": [
+        "coord_axes"
+      ],
+      "cam": {
+        "position": [
+          8,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "phase": "标记关键量",
+      "speech": "设底面三角形 ABC 的面积为 S，PA 的长度为 h，这些都是已知量或待求量。",
+      "els": [
+        "vec_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          5,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "分析几何关系",
+      "speech": "因为 PA 垂直于平面 ABC，所以 PA 垂直于底面内任意直线，包括 AB 和 AC。",
+      "els": [
+        "vec_PA",
+        "vec_AB",
+        "vec_AC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "展示垂直关系",
+      "speech": "从动画中可以看到 PA 与底面内的任意方向都保持垂直，这是由给定条件保证的。",
+      "els": [
+        "right_angles"
+      ],
+      "cam": {
+        "position": [
+          7,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "phase": "确定体积公式",
+      "speech": "四面体体积公式是 V = 一半的底面积乘以高，即底面 ABC 面积乘以 PA 长度再除以三。",
+      "els": [
+        "pl_ABC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "代入具体数值",
+      "speech": "以 AB=3, AC=4 为例，底面直角三角形面积为 6，PA=5。",
+      "els": [
+        "vec_AB",
+        "vec_AC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          5,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "计算具体结果",
+      "speech": "体积 V = 三分之一乘以 6 乘以 5 = 10，这就是该四面体的体积。",
+      "els": [
+        "ln_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "phase": "从另一视角观察",
+      "speech": "换一个角度看，四面体的四个面都清晰可见，结构非常规整。",
+      "els": [
+        "all_planes"
+      ],
+      "cam": {
+        "position": [
+          4,
+          6,
+          8
+        ]
+      }
+    },
+    {
+      "phase": "演示体积构成",
+      "speech": "想象以底面 ABC 为基准，PA 作为高度，四面体的体积就是这个直三棱锥的体积。",
+      "els": [
+        "pl_ABC",
+        "ln_PA"
+      ],
+      "cam": {
+        "position": [
+          7,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "phase": "总结方法",
+      "speech": "本题的核心是利用 PA 垂直于底面这一条件，将 PA 作为四面体的高来计算体积。",
+      "els": [
+        "vec_PA",
+        "pl_ABC"
+      ],
+      "cam": {
+        "position": [
+          6,
+          5,
+          7
+        ]
+      }
+    }
+  ]
+};
+</script>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer,CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+
+/* ===== READ SCENE DATA ===== */
+const SD = window.sceneData || {};
+const V = SD.vertices || {};
+const s3 = Math.sqrt(3);
+
+/* ===== BUILD PROBLEM PANEL ===== */
+document.getElementById('rd-title').textContent = SD.title || '3D讲解';
+const rdBody = document.getElementById('rd-body');
+rdBody.innerHTML = (SD.problem_html || '') +
+  (SD.questions || []).map(q =>
+    '<div class="rd-q">' + q.label + '</div>' + q.html
+  ).join('');
+// Auto-wrap LaTeX commands inside .t spans with $...$
+rdBody.querySelectorAll('.t').forEach(span=>{
+  const txt=span.textContent;
+  if(/\\[a-zA-Z]/.test(txt) && !txt.includes('$')){
+    span.innerHTML='$'+txt+'$';
+  }
+});
+
+// ---- Auto-detect & wrap missed geometric references ----
+// Build lookup: all vertex-pair names → element id
+const vNames=Object.keys(V);
+const pairToId={};
+// lines
+(SD.lines||[]).forEach(l=>{
+  pairToId[l.from+l.to]=l.id;
+  pairToId[l.to+l.from]=l.id;
+});
+// planes (by name, e.g. "PBC" → pl_PBC)
+(SD.planes||[]).forEach(p=>{
+  const nm=(p.id||'').replace(/^pl_/,'');
+  if(nm) pairToId[nm]=p.id;
+});
+(SD.all_planes||[]).forEach(p=>{
+  if(p.name) pairToId[p.name]='pl_'+p.name;
+});
+// Also add single-vertex names mapping to any line starting from that vertex
+// and base face name
+if(SD.base_face_vertices){
+  const bfn=SD.base_face_vertices.map(v=>v).join('');
+  pairToId[bfn]='pl_base';
+  pairToId['底面']='pl_base';
+}
+
+// Build regex matching all known names, longest first
+const allKeys=Object.keys(pairToId).sort((a,b)=>b.length-a.length);
+const keyPattern=allKeys.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+
+if(keyPattern){
+  const geoRe=new RegExp('('+keyPattern+')','g');
+
+  // Walk all text nodes inside rdBody, skip those already inside .t spans
+  function walkText(node){
+    if(node.nodeType===1){
+      // Skip if this is a .t span or inside one, or a script/style
+      if(node.classList&&node.classList.contains('t'))return;
+      if(node.tagName==='SCRIPT'||node.tagName==='STYLE')return;
+      // Walk children in reverse so insertions don't shift indices
+      const kids=[...node.childNodes];
+      kids.forEach(walkText);
+    } else if(node.nodeType===3){
+      const txt=node.textContent;
+      if(!geoRe.test(txt))return;
+      geoRe.lastIndex=0;
+      // Check if already inside a .t span
+      let p=node.parentNode;
+      while(p&&p!==rdBody){
+        if(p.classList&&p.classList.contains('t'))return;
+        p=p.parentNode;
+      }
+      // Split text node and wrap matches
+      const frag=document.createDocumentFragment();
+      let last=0;
+      let match;
+      geoRe.lastIndex=0;
+      while((match=geoRe.exec(txt))!==null){
+        if(match.index>last){
+          frag.appendChild(document.createTextNode(txt.slice(last,match.index)));
+        }
+        const span=document.createElement('span');
+        span.className='t';
+        span.dataset.el=pairToId[match[1]]||'';
+        span.textContent=match[1];
+        frag.appendChild(span);
+        last=geoRe.lastIndex;
+      }
+      if(last<txt.length){
+        frag.appendChild(document.createTextNode(txt.slice(last)));
+      }
+      if(last>0) node.parentNode.replaceChild(frag,node);
+    }
+  }
+  walkText(rdBody);
+}
+
+// Render math in the problem panel
+if(window.renderMathInElement){
+  renderMathInElement(rdBody, {
+    delimiters:[
+      {left:'$$',right:'$$',display:true},
+      {left:'$',right:'$',display:false},
+      {left:'\\(',right:'\\)',display:false},
+      {left:'\\[',right:'\\]',display:true}
+    ],
+    throwOnError:false
+  });
+}
+
+/* ===== COORD TRANSFORM ===== */
+function v3(name){
+  const c = V[name];
+  if(!c) return new THREE.Vector3(0,0,0);
+  return new THREE.Vector3(c[0], c[1], c[2]);
+}
+
+/* ===== SCENE SETUP ===== */
+const initCam = SD.initial_camera || {position:[5,4,5], target:[0.5,0.8,0.3]};
+const box=document.getElementById('c');
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,0.1,100);
+cam.position.set(...initCam.position);cam.lookAt(...initCam.target);
+const ren=new THREE.WebGLRenderer({antialias:true});
+ren.setSize(innerWidth,innerHeight);ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.setClearColor(0x0a0e1a);
+box.appendChild(ren.domElement);
+const lRen=new CSS2DRenderer();lRen.setSize(innerWidth,innerHeight);
+lRen.domElement.style.cssText='position:absolute;top:0;pointer-events:none';
+box.appendChild(lRen.domElement);
+const ctrl=new OrbitControls(cam,ren.domElement);
+ctrl.enableDamping=true;ctrl.dampingFactor=0.08;ctrl.target.set(...initCam.target);ctrl.update();
+scene.add(new THREE.AmbientLight(0xffffff,0.5));
+const dl=new THREE.DirectionalLight(0xffffff,0.8);dl.position.set(5,8,5);scene.add(dl);
+
+/* ===== HELPERS ===== */
+function mkLine(a,b,col,lw=2){return new THREE.Line(new THREE.BufferGeometry().setFromPoints([a,b]),new THREE.LineBasicMaterial({color:col,linewidth:lw}))}
+function mkDash(a,b,col,ds=.15,gs=.1){const g=new THREE.BufferGeometry().setFromPoints([a,b]);const l=new THREE.Line(g,new THREE.LineDashedMaterial({color:col,dashSize:ds,gapSize:gs}));l.computeLineDistances();return l}
+function mkDot(p,col,r=.06){const m=new THREE.Mesh(new THREE.SphereGeometry(r,16,16),new THREE.MeshBasicMaterial({color:col}));m.position.copy(p);return m}
+function mkLbl(t,p,col='#fff',sz='14px'){const d=document.createElement('div');d.textContent=t;d.style.cssText=`color:${col};font-size:${sz};font-weight:700;font-style:italic;font-family:'Times New Roman',serif;text-shadow:0 0 8px rgba(0,0,0,.9);pointer-events:none`;const o=new CSS2DObject(d);o.position.copy(p);return o}
+function mkTriMesh(pts,col,op=.18){const vs=[];for(let i=1;i<pts.length-1;i++)vs.push(pts[0].x,pts[0].y,pts[0].z,pts[i].x,pts[i].y,pts[i].z,pts[i+1].x,pts[i+1].y,pts[i+1].z);const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(vs,3));g.computeVertexNormals();return new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:col,opacity:op,transparent:true,side:THREE.DoubleSide,depthWrite:false}))}
+function mkRA(v,d1,d2,sz,col){const p1=v.clone().addScaledVector(d1,sz),p2=p1.clone().addScaledVector(d2,sz),p3=v.clone().addScaledVector(d2,sz);return new THREE.Line(new THREE.BufferGeometry().setFromPoints([p1,p2,p3]),new THREE.LineBasicMaterial({color:col}))}
+function mkArrow(a,b,col,hl=.18,hw=.09){const d=new THREE.Vector3().subVectors(b,a);return new THREE.ArrowHelper(d.clone().normalize(),a,d.length(),col,hl,hw)}
+function setGroupLblVis(group,vis){
+  group.traverse(o=>{if(o.isCSS2DObject) o.visible=vis});
+}
+function nv3(nx,ny,nz,s=1.3){const l=Math.sqrt(nx*nx+ny*ny+nz*nz);return new THREE.Vector3(nx/l*s,ny/l*s,nz/l*s)}
+// Convert raw [x,y,z] array (Three.js y-up coords) to Vector3 — used for shapes
+function v3arr(arr){if(!arr)return new THREE.Vector3();return new THREE.Vector3(arr[0],arr[1],arr[2])}
+
+/* ===== BASE FIGURE ===== */
+const base=new THREE.Group();
+const styles = SD.vertex_styles || {};
+// Solid edges
+(SD.base_edges_solid || []).forEach(([a,b])=>base.add(mkLine(v3(a),v3(b),0xc8d8f0)));
+// Special edges (e.g. PA in red)
+(SD.base_edges_special || []).forEach(e=>base.add(mkLine(v3(e.from),v3(e.to),parseInt(e.color),e.width||2)));
+// Dashed edges
+(SD.base_edges_dashed || []).forEach(([a,b])=>base.add(mkDash(v3(a),v3(b),0x556688)));
+// Base face
+if(SD.base_face_vertices) base.add(mkTriMesh(SD.base_face_vertices.map(n=>v3(n)),0x3366aa,0.05));
+// Vertex dots + labels
+Object.keys(V).forEach(name=>{
+  const st = styles[name] || {};
+  base.add(mkDot(v3(name),parseInt(st.dot_hex||'0xaabbdd'),0.035));
+  const off = st.label_offset || [0.3,-0.15,0];
+  base.add(mkLbl(name,v3(name).add(new THREE.Vector3(off[0],off[1],off[2])),st.color||'#c8d8f0','15px'));
+});
+// Shapes: circles, frustums, cylinders, cones, spheres
+(SD.shapes || []).forEach(sh=>{
+  if(sh.type==='circle'){
+    const c=v3arr(sh.center); const r=sh.radius||1; const seg=sh.segments||128;
+    const col=parseInt(sh.color||'0x4488ff');
+    // Crisp circle outline using LineLoop
+    const circlePts=[];
+    for(let i=0;i<seg;i++){const a=i/seg*Math.PI*2;circlePts.push(new THREE.Vector3(c.x+r*Math.cos(a),c.y,c.z+r*Math.sin(a)))}
+    const lineGeom=new THREE.BufferGeometry().setFromPoints(circlePts);
+    const lineMat=new THREE.LineBasicMaterial({color:col,opacity:sh.line_opacity||0.85,transparent:true});
+    base.add(new THREE.LineLoop(lineGeom,lineMat));
+    // Filled disc using CircleGeometry (rotated to horizontal)
+    if(sh.fill!==false){
+      const discGeom=new THREE.CircleGeometry(r,seg);
+      discGeom.rotateX(-Math.PI/2); // lay flat (XZ plane)
+      const discMat=new THREE.MeshBasicMaterial({color:col,opacity:sh.fill_opacity||0.04,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+      const disc=new THREE.Mesh(discGeom,discMat);
+      disc.position.copy(c);
+      base.add(disc);
+    }
+  } else if(sh.type==='frustum'||sh.type==='cylinder'||sh.type==='cone'){
+    const bc=v3arr(sh.bottom_center||sh.center); const tc=v3arr(sh.top_center||sh.center);
+    const br=sh.bottom_radius||1; const tr=sh.top_radius!=null?sh.top_radius:(sh.type==='cone'?0:br);
+    const col=parseInt(sh.color||'0x4488ff'); const op=sh.opacity||0.08;
+    const seg=sh.segments||64;
+    const h=bc.distanceTo(tc);
+    // Lateral surface with MeshPhysicalMaterial for realistic lighting
+    const geom=new THREE.CylinderGeometry(tr,br,h,seg,1,true);
+    const mat=new THREE.MeshPhysicalMaterial({
+      color:col,opacity:op,transparent:true,side:THREE.DoubleSide,
+      depthWrite:false,roughness:0.3,metalness:0.1
+    });
+    const mesh=new THREE.Mesh(geom,mat);
+    const mid=bc.clone().add(tc).multiplyScalar(0.5);
+    mesh.position.copy(mid);
+    const dir=new THREE.Vector3().subVectors(tc,bc).normalize();
+    const up=new THREE.Vector3(0,1,0);
+    if(Math.abs(dir.dot(up))< 0.999){
+      const q=new THREE.Quaternion().setFromUnitVectors(up,dir);
+      mesh.quaternion.copy(q);
+    }
+    base.add(mesh);
+    // Top & bottom circle outlines (128-seg for smoothness)
+    const outSeg=128;
+    [{ center:bc, radius:br },{ center:tc, radius:tr }].forEach(({center,radius})=>{
+      if(radius<0.001) return; // skip cone apex
+      const pts=[];
+      for(let i=0;i<outSeg;i++){const a=i/outSeg*Math.PI*2;pts.push(new THREE.Vector3(center.x+radius*Math.cos(a),center.y,center.z+radius*Math.sin(a)))}
+      base.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:col,opacity:0.7,transparent:true})));
+    });
+    // Guide lines (母线) — solid thin lines
+    if(sh.guide_lines!==false){
+      const gSeg=sh.guide_segments||8;
+      for(let i=0;i<gSeg;i++){
+        const a=i/gSeg*Math.PI*2;
+        const bPt=new THREE.Vector3(bc.x+br*Math.cos(a),bc.y,bc.z+br*Math.sin(a));
+        const tPt=new THREE.Vector3(tc.x+tr*Math.cos(a),tc.y,tc.z+tr*Math.sin(a));
+        base.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([bPt,tPt]),new THREE.LineBasicMaterial({color:col,opacity:0.25,transparent:true})));
+      }
+    }
+  }
+});
+// Right angle marks
+(SD.right_angles || []).forEach(ra=>{
+  const vtx=v3(ra.vertex);
+  const d1=new THREE.Vector3().subVectors(v3(ra.dir1_toward),vtx).normalize();
+  const d2=new THREE.Vector3().subVectors(v3(ra.dir2_toward),vtx).normalize();
+  base.add(mkRA(vtx,d1,d2,0.18,parseInt(ra.color)));
+});
+scene.add(base);
+
+/* ===== RAYCAST FACES ===== */
+const rayFaces=new THREE.Group();
+rayFaces.visible=true;
+const faceDefs=(SD.face_defs || []).map(f=>{
+  const pts=f.pts;
+  let nMathRC=f.nMathRC||null;
+  if(!nMathRC){
+    const a=V[pts[0]],b=V[pts[1]],c=V[pts[2]];
+    if(a&&b&&c){
+      const ab=[b[0]-a[0],b[1]-a[1],b[2]-a[2]];
+      const ac=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];
+      nMathRC=[ab[1]*ac[2]-ab[2]*ac[1],ab[2]*ac[0]-ab[0]*ac[2],ab[0]*ac[1]-ab[1]*ac[0]];
+      const l=Math.sqrt(nMathRC[0]**2+nMathRC[1]**2+nMathRC[2]**2);
+      if(l>1e-12) nMathRC=nMathRC.map(x=>x/l); else nMathRC=[0,0,1];
+    } else { nMathRC=[0,0,1]; }
+  }
+  return {...f, nMathRC};
+});
+faceDefs.forEach(f=>{
+  const verts=f.pts.map(n=>v3(n));
+  const mesh=mkTriMesh(verts,0x000000,0);
+  mesh.material.visible=false;
+  mesh.userData.faceName=f.name;
+  mesh.userData.nMath=f.nMathRC;
+  rayFaces.add(mesh);
+});
+scene.add(rayFaces);
+
+/* ===== ELEMENT REGISTRY ===== */
+const elems={};
+const raycaster=new THREE.Raycaster();
+const dragTargets=[];
+
+function regLine(id,from,to,col,opts={}){
+  const g=new THREE.Group();g.visible=false;
+  const a=v3(from),b=v3(to);
+  if(opts.dashed) g.add(mkDash(a,b,col));
+  else g.add(mkLine(a,b,col,3));
+  const dir=new THREE.Vector3().subVectors(b,a);const len=dir.length();dir.normalize();
+  const tubeG=new THREE.CylinderGeometry(.1,.1,len,8,1);tubeG.rotateX(Math.PI/2);
+  const tube=new THREE.Mesh(tubeG,new THREE.MeshBasicMaterial({transparent:true,opacity:0}));
+  tube.position.copy(a).addScaledVector(dir,len/2);tube.lookAt(b);
+  tube.userData={elemId:id,type:'line'};
+  g.add(tube);
+  if(opts.ra){
+    const{vertex,d1,d2}=opts.ra;
+    g.add(mkRA(vertex,d1,d2,.25,col));
+  }
+  scene.add(g);
+  elems[id]={group:g,type:'line',color:col,name:from+to,tube,from,to};
+  dragTargets.push(tube);
+}
+
+function regPlane(id,vtxNames,col){
+  const g=new THREE.Group();g.visible=false;
+  const pts=vtxNames.map(n=>v3(n));
+  const mesh=mkTriMesh(pts,col,.22);
+  mesh.userData={elemId:id,type:'plane'};
+  g.add(mesh);
+  for(let i=0;i<pts.length;i++) g.add(mkLine(pts[i],pts[(i+1)%pts.length],col,2));
+  const e1=new THREE.Vector3().subVectors(pts[1],pts[0]);
+  const e2=new THREE.Vector3().subVectors(pts[2],pts[0]);
+  const norm=new THREE.Vector3().crossVectors(e1,e2).normalize();
+  scene.add(g);
+  elems[id]={group:g,type:'plane',color:col,name:vtxNames.join(''),mesh,normal:norm,vtxNames};
+  dragTargets.push(mesh);
+}
+
+// Register lines from SD
+(SD.lines || []).forEach(l=>regLine(l.id,l.from,l.to,parseInt(l.color),{dashed:l.dashed||false}));
+// Register planes from SD
+(SD.planes || []).forEach(p=>regPlane(p.id,p.vertices,parseInt(p.color)));
+
+/* ===== COORDINATE SYSTEM ===== */
+const stickyEls=new Set(SD.sticky_elements || []);
+if(SD.coord_system){
+  const cs=SD.coord_system;
+  const g=new THREE.Group();g.visible=false;
+  const origin=v3(cs.origin);
+  const axLen=cs.length||1.8;
+  (cs.axes||[]).forEach(ax=>{
+    const dir=new THREE.Vector3(...ax.tjs_vector).normalize().multiplyScalar(axLen);
+    const tip=origin.clone().add(dir);
+    g.add(mkArrow(origin,tip,parseInt(ax.color),0.2,0.12));
+    g.add(mkLbl(ax.label,tip.clone().add(new THREE.Vector3(0.15,-0.1,0)),'#'+parseInt(ax.color).toString(16).padStart(6,'0'),'14px'));
+  });
+  if(cs.origin_label) g.add(mkLbl(cs.origin_label,origin.clone().add(new THREE.Vector3(0.3,-0.3,-0.2)),'#ffffff','12px'));
+  scene.add(g);
+  elems['coord_axes']={group:g,type:'decoration',color:0xffffff,name:'坐标轴'};
+
+  // Coord labels
+  if(cs.coord_labels){
+    const gc=new THREE.Group();gc.visible=false;
+    Object.entries(cs.coord_labels).forEach(([name,coord])=>{
+      const st=styles[name]||{};
+      const off=st.label_offset||[0.4,-0.15,0];
+      gc.add(mkLbl(coord,v3(name).add(new THREE.Vector3(off[0]+0.2,off[1],off[2])),'#aaddff','10px'));
+    });
+    scene.add(gc);
+    elems['coord_labels']={group:gc,type:'decoration',color:0xaaddff,name:'顶点坐标'};
+  }
+}
+
+/* ===== VECTORS & NORMALS ===== */
+(SD.vectors || []).forEach(vec=>{
+  const g=new THREE.Group();g.visible=false;
+  const a=v3(vec.from),b=v3(vec.to);
+  g.add(mkArrow(a,b,parseInt(vec.color),0.18,0.1));
+  const mid=a.clone().add(b).multiplyScalar(0.5).add(new THREE.Vector3(-0.25,0.15,0));
+  g.add(mkLbl(vec.label,mid,'#'+parseInt(vec.color).toString(16).padStart(6,'0'),'13px'));
+  scene.add(g);
+  elems[vec.id]={group:g,type:'decoration',color:parseInt(vec.color),name:vec.id};
+});
+
+(SD.normals || []).forEach(nm=>{
+  const g=new THREE.Group();g.visible=false;
+  const ctr=nm.center_vertices.map(n=>v3(n)).reduce((a,b)=>a.add(b),new THREE.Vector3()).multiplyScalar(1/nm.center_vertices.length);
+  const [nx,ny,nz]=nm.math_direction;
+  const nDir=nv3(nx,ny,nz,nm.scale||1.5);
+  const tip=ctr.clone().add(nDir);
+  g.add(mkArrow(ctr,tip,parseInt(nm.color),0.2,0.12));
+  g.add(mkLbl(nm.label,tip.clone().add(new THREE.Vector3(0.15,0.15,0)),'#'+parseInt(nm.color).toString(16).padStart(6,'0'),'16px'));
+  scene.add(g);
+  elems[nm.id]={group:g,type:'decoration',color:parseInt(nm.color),name:nm.id};
+});
+
+/* ===== CSS2D LABEL INIT ===== */
+Object.keys(elems).forEach(id=>setGroupLblVis(elems[id].group,false));
+
+/* ===== READER CLICK LOGIC ===== */
+const activeSet=new Set();
+document.querySelectorAll('.t').forEach(span=>{
+  const elId=span.dataset.el;
+  span.addEventListener('click',()=>{
+    if(!elems[elId]) return;
+    if(activeSet.has(elId)){
+      activeSet.delete(elId);
+      span.classList.remove('on');
+      elems[elId].group.visible=false;
+      setGroupLblVis(elems[elId].group,false);
+      elems[elId].group.position.set(0,0,0);
+      document.querySelectorAll(`.t[data-el="${elId}"]`).forEach(s=>s.classList.remove('on'));
+    } else {
+      activeSet.add(elId);
+      span.classList.add('on');
+      elems[elId].group.visible=true;
+      setGroupLblVis(elems[elId].group,true);
+      document.querySelectorAll(`.t[data-el="${elId}"]`).forEach(s=>s.classList.add('on'));
+    }
+    updateDetail();
+  });
+});
+
+/* ===== DETAIL PANEL ===== */
+const detailEl=document.getElementById('detail');
+const detailTitle=document.getElementById('detail-title');
+const detailBody=document.getElementById('detail-body');
+
+function kR(el,tex){katex.render(tex,el,{throwOnError:false,displayMode:true})}
+function addMath(tex){const d=document.createElement('div');d.className='math-block';kR(d,tex);detailBody.appendChild(d)}
+function addDesc(html){const d=document.createElement('div');d.className='desc';d.innerHTML=html;detailBody.appendChild(d)}
+function addResult(txt){const d=document.createElement('div');d.className='result';d.textContent=txt;detailBody.appendChild(d)}
+
+function updateDetail(){
+  detailBody.innerHTML='';
+  if(activeSet.size===0){detailEl.style.display='none';return}
+  detailEl.style.display='block';
+  detailTitle.textContent='选中元素详情';
+
+  (SD.detail_rules || []).forEach(rule=>{
+    const cond=rule.condition;
+    let match=false;
+    if(cond.all) match=cond.all.every(id=>activeSet.has(id));
+    else if(cond.any) match=cond.any.some(id=>activeSet.has(id));
+    if(match){
+      rule.content.forEach(m=>{
+        if(m.type==='tex') addMath(m.v);
+        else if(m.type==='result') addResult(m.v);
+        else addDesc(m.v);
+      });
+    }
+  });
+
+  // Individual element info (line lengths)
+  activeSet.forEach(id=>{
+    const e=elems[id];
+    if(e&&e.type==='line'){
+      const fr=V[e.from],tt=V[e.to];
+      if(fr&&tt){
+        const dx=fr[0]-tt[0],dy=fr[1]-tt[1],dz=fr[2]-tt[2];
+        const len=Math.sqrt(dx*dx+dy*dy+dz*dz);
+        addDesc(`|${e.from}${e.to}| = ${Number.isInteger(len)?len:len.toFixed(4)}`);
+      }
+    }
+  });
+}
+
+/* ===== DRAG SYSTEM ===== */
+let dragging=null;
+const mouse=new THREE.Vector2();
+const tooltip=document.getElementById('tooltip');
+
+function getMouse(e){
+  return new THREE.Vector2((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);
+}
+
+box.addEventListener('pointerdown',e=>{
+  if(auxMode)return;
+  const m=getMouse(e);
+  raycaster.setFromCamera(m,cam);
+  const hits=raycaster.intersectObjects(dragTargets).filter(h=>h.object.parent&&h.object.parent.visible);
+  if(!hits.length)return;
+  const obj=hits[0].object;
+  const id=obj.userData.elemId;
+  if(!id||!activeSet.has(id))return;
+  const elem=elems[id];
+  dragging={
+    elemId:id,
+    startX:e.clientX,startY:e.clientY,
+    startPos:elem.group.position.clone(),
+    normal:elem.type==='plane'?elem.normal.clone():null
+  };
+  ctrl.enabled=false;
+  box.style.cursor='move';
+  e.preventDefault();e.stopPropagation();
+},{capture:true});
+
+box.addEventListener('pointermove',e=>{
+  if(auxMode)return;
+  if(!dragging){
+    const m=getMouse(e);
+    raycaster.setFromCamera(m,cam);
+    const hits=raycaster.intersectObjects(dragTargets).filter(h=>h.object.parent&&h.object.parent.visible);
+    if(hits.length&&activeSet.has(hits[0].object.userData.elemId)){
+      tooltip.style.display='block';
+      tooltip.style.left=(e.clientX+12)+'px';
+      tooltip.style.top=(e.clientY-20)+'px';
+      tooltip.textContent='拖拽移动';
+      box.style.cursor='grab';
+    } else {
+      tooltip.style.display='none';
+    }
+    return;
+  }
+  const dx=e.clientX-dragging.startX;
+  const dy=e.clientY-dragging.startY;
+  const camRight=new THREE.Vector3();
+  const camUp=new THREE.Vector3();
+  cam.getWorldDirection(new THREE.Vector3());
+  camRight.setFromMatrixColumn(cam.matrixWorld,0).normalize();
+  camUp.setFromMatrixColumn(cam.matrixWorld,1).normalize();
+  const scale=0.012;
+  const offset=camRight.multiplyScalar(dx*scale).add(camUp.multiplyScalar(-dy*scale));
+  elems[dragging.elemId].group.position.copy(dragging.startPos).add(offset);
+});
+
+box.addEventListener('pointerup',()=>{
+  if(dragging){
+    dragging=null;
+    ctrl.enabled=true;
+    box.style.cursor='grab';
+    tooltip.style.display='none';
+  }
+});
+
+box.addEventListener('dblclick',e=>{
+  const m=getMouse(e);
+  raycaster.setFromCamera(m,cam);
+  const hits=raycaster.intersectObjects(dragTargets).filter(h=>h.object.parent&&h.object.parent.visible);
+  if(hits.length){
+    const id=hits[0].object.userData.elemId;
+    if(id&&elems[id])elems[id].group.position.set(0,0,0);
+  }
+});
+
+/* ===== AUX LINE TOOL ===== */
+const vtxHits=[];const vtxPos={};
+Object.keys(V).forEach(name=>{
+  const pos=v3(name);vtxPos[name]=pos.clone();
+  const sp=new THREE.Mesh(new THREE.SphereGeometry(.2,10,10),new THREE.MeshBasicMaterial({transparent:true,opacity:0}));
+  sp.position.copy(pos);sp.userData={vtx:name};scene.add(sp);vtxHits.push(sp);
+});
+let auxMode=false,auxStart=null,auxPreview=null,auxGlow=null;
+const auxGroup=new THREE.Group();scene.add(auxGroup);
+const auxList=[];
+const auxStatus=document.getElementById('aux-status');
+
+function getVtxHit(e){
+  const m=getMouse(e);raycaster.setFromCamera(m,cam);
+  const h=raycaster.intersectObjects(vtxHits);
+  return h.length?h[0].object:null;
+}
+
+function raycastFace(e){
+  const m=getMouse(e);
+  raycaster.setFromCamera(m,cam);
+  const hits=raycaster.intersectObjects(rayFaces.children);
+  if(hits.length===0)return null;
+  return {point:hits[0].point.clone(), faceName:hits[0].object.userData.faceName, nMath:hits[0].object.userData.nMath};
+}
+
+function drawLineAngleToFace(from,to,faceHit,group){
+  const nMath=faceHit.nMath;
+  const dx=to.x-from.x, dy=to.z-from.z, dz=to.y-from.y;
+  const dLen=Math.sqrt(dx*dx+dy*dy+dz*dz);
+  if(dLen<1e-8)return;
+  const udx=dx/dLen, udy=dy/dLen, udz=dz/dLen;
+  const dotN=udx*nMath[0]+udy*nMath[1]+udz*nMath[2];
+  const absDotN=Math.abs(dotN);
+  const angleDeg=Math.asin(Math.min(1,absDotN))*180/Math.PI;
+  if(angleDeg<0.5)return;
+
+  const pjx=udx-dotN*nMath[0], pjy=udy-dotN*nMath[1], pjz=udz-dotN*nMath[2];
+  const pjLen=Math.sqrt(pjx*pjx+pjy*pjy+pjz*pjz);
+  if(pjLen<1e-8)return;
+
+  const projDir=new THREE.Vector3(pjx/pjLen, pjz/pjLen, pjy/pjLen);
+  const lineDir=new THREE.Vector3(-udx,-udz,-udy).normalize();
+
+  const arcR=0.4;
+  const segs=20;
+  const angleRad=angleDeg*Math.PI/180;
+  const arcPts=[];
+  const sinA=Math.sin(angleRad);
+  if(sinA<1e-8)return;
+  for(let i=0;i<=segs;i++){
+    const t=i/segs;
+    const s1=Math.sin((1-t)*angleRad)/sinA;
+    const s2=Math.sin(t*angleRad)/sinA;
+    const px=s1*projDir.x+s2*lineDir.x;
+    const py=s1*projDir.y+s2*lineDir.y;
+    const pz=s1*projDir.z+s2*lineDir.z;
+    arcPts.push(to.clone().add(new THREE.Vector3(px*arcR,py*arcR,pz*arcR)));
+  }
+  if(arcPts.length>1){
+    const arcGeom=new THREE.BufferGeometry().setFromPoints(arcPts);
+    group.add(new THREE.Line(arcGeom,new THREE.LineBasicMaterial({color:0xffcc44})));
+  }
+  const midIdx=Math.floor(segs/2);
+  if(arcPts[midIdx]){
+    const lblPos=arcPts[midIdx].clone().add(new THREE.Vector3(0,.15,0));
+    group.add(mkLbl(angleDeg.toFixed(1)+'°',lblPos,'#ffcc44','11px'));
+  }
+  group.add(mkLbl('∠面'+faceHit.faceName,to.clone().add(new THREE.Vector3(.2,-.25,0)),'#ffcc44','10px'));
+}
+
+function enterAux(){
+  if(perpMode)exitPerp();
+  auxMode=true;auxStart=null;
+  document.getElementById('btn-aux').classList.add('active');
+  auxStatus.style.display='block';auxStatus.textContent='点击起点顶点...';
+}
+function exitAux(){
+  auxMode=false;auxStart=null;
+  document.getElementById('btn-aux').classList.remove('active');
+  auxStatus.style.display='none';
+  if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+  if(auxGlow){scene.remove(auxGlow);auxGlow=null}
+}
+document.getElementById('btn-aux').addEventListener('click',()=>{auxMode?exitAux():enterAux()});
+document.getElementById('btn-aux-clear').addEventListener('click',()=>{
+  while(auxGroup.children.length)auxGroup.remove(auxGroup.children[0]);
+  auxList.length=0;exitAux();if(perpMode)exitPerp();
+});
+
+// Preview on hover
+box.addEventListener('pointermove',e=>{
+  if(!auxMode||!auxStart)return;
+  if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+  const hit=getVtxHit(e);
+  if(hit&&hit.userData.vtx!==auxStart.name){
+    const ep=vtxPos[hit.userData.vtx];
+    const g=new THREE.BufferGeometry().setFromPoints([auxStart.pos,ep]);
+    auxPreview=new THREE.Line(g,new THREE.LineDashedMaterial({color:0x44ddaa,dashSize:.12,gapSize:.08,transparent:true,opacity:.6}));
+    auxPreview.computeLineDistances();scene.add(auxPreview);
+    tooltip.style.display='block';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-20)+'px';
+    tooltip.textContent=auxStart.name+' → '+hit.userData.vtx;
+    box.style.cursor='crosshair';
+  } else {
+    const fh=raycastFace(e);
+    if(fh){
+      const g=new THREE.BufferGeometry().setFromPoints([auxStart.pos,fh.point]);
+      auxPreview=new THREE.Line(g,new THREE.LineDashedMaterial({color:0x44ddaa,dashSize:.12,gapSize:.08,transparent:true,opacity:.5}));
+      auxPreview.computeLineDistances();scene.add(auxPreview);
+      tooltip.style.display='block';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-20)+'px';
+      tooltip.textContent=auxStart.name+' → 面'+fh.faceName+' (任意点)';
+      box.style.cursor='crosshair';
+    } else {
+      tooltip.style.display='none';
+      box.style.cursor='crosshair';
+    }
+  }
+});
+
+// Click to place
+box.addEventListener('pointerdown',e=>{
+  if(!auxMode)return;
+  const hit=getVtxHit(e);
+  if(!auxStart){
+    if(!hit)return;
+    const name=hit.userData.vtx,pos=vtxPos[name];
+    auxStart={name,pos:pos.clone()};
+    auxGlow=mkDot(pos,0x44ddaa,.15);scene.add(auxGlow);
+    auxStatus.textContent='起点: '+name+' → 点击终点(顶点或面上任意位置)...';
+    e.stopPropagation();
+  } else {
+    if(hit&&hit.userData.vtx!==auxStart.name){
+      const name=hit.userData.vtx,pos=vtxPos[name];
+      auxGroup.add(mkDash(auxStart.pos,pos,0x44ddaa,.1,.07));
+      const mid=auxStart.pos.clone().add(pos).multiplyScalar(.5);
+      const d=V[auxStart.name],t=V[name];
+      if(d&&t){
+        const len=Math.sqrt((d[0]-t[0])**2+(d[1]-t[1])**2+(d[2]-t[2])**2);
+        const ls=Number.isInteger(len)?''+len:len.toFixed(3);
+        auxGroup.add(mkLbl(auxStart.name+name+'='+ls,mid.clone().add(new THREE.Vector3(.12,.18,0)),'#44ddaa','10px'));
+      }
+      faceDefs.forEach(f=>{
+        if(f.pts.includes(name)&&!f.pts.includes(auxStart.name)){
+          drawLineAngleToFace(auxStart.pos,pos,{faceName:f.name,nMath:f.nMathRC},auxGroup);
+        }
+      });
+      auxList.push({from:auxStart.name,to:name});
+    } else {
+      const fh=raycastFace(e);
+      if(!fh)return;
+      const endPos=fh.point;
+      auxGroup.add(mkDash(auxStart.pos,endPos,0x44ddaa,.1,.07));
+      auxGroup.add(mkDot(endPos,0x44ddaa,.05));
+      const d=V[auxStart.name];
+      if(d){
+        const ex=endPos.x,ey=endPos.z,ez=endPos.y;
+        const len=Math.sqrt((d[0]-ex)**2+(d[1]-ey)**2+(d[2]-ez)**2);
+        const ls=len.toFixed(2);
+        const mid=auxStart.pos.clone().add(endPos).multiplyScalar(.5);
+        auxGroup.add(mkLbl('L='+ls,mid.clone().add(new THREE.Vector3(.12,.18,0)),'#44ddaa','10px'));
+      }
+      drawLineAngleToFace(auxStart.pos,endPos,{faceName:fh.faceName,nMath:fh.nMath},auxGroup);
+      auxList.push({from:auxStart.name,to:'面'+fh.faceName});
+    }
+    if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+    if(auxGlow){scene.remove(auxGlow);auxGlow=null}
+    auxStart=null;
+    auxStatus.textContent='已添加 '+auxList.length+' 条辅助线 · 继续画或点按钮退出';
+    e.stopPropagation();
+  }
+},{capture:true});
+
+addEventListener('keydown',e=>{if(e.key==='Escape'&&auxMode)exitAux();if(e.key==='Escape'&&perpMode)exitPerp()});
+
+/* ===== PERP TOOL ===== */
+let perpMode=false, perpStep=0, perpPoint=null;
+const perpStatus=auxStatus;
+const allEdges=SD.all_edges || [];
+const allPlanes=(SD.all_planes || []).map(pl=>{
+  let nMath=pl.nMath||null;
+  if(!nMath){
+    const a=V[pl.pts[0]],b=V[pl.pts[1]],c=V[pl.pts[2]];
+    if(a&&b&&c){
+      const ab=[b[0]-a[0],b[1]-a[1],b[2]-a[2]];
+      const ac=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];
+      nMath=[ab[1]*ac[2]-ab[2]*ac[1],ab[2]*ac[0]-ab[0]*ac[2],ab[0]*ac[1]-ab[1]*ac[0]];
+      const l=Math.sqrt(nMath[0]**2+nMath[1]**2+nMath[2]**2);
+      if(l>1e-12) nMath=nMath.map(x=>x/l); else nMath=[0,0,1];
+    } else { nMath=[0,0,1]; }
+  }
+  const a=V[pl.pts[0]];
+  const d=a?(nMath[0]*a[0]+nMath[1]*a[1]+nMath[2]*a[2]):0;
+  return {...pl, nMath, d};
+});
+
+function enterPerp(){
+  if(auxMode)exitAux();
+  perpMode=true;perpStep=0;perpPoint=null;
+  document.getElementById('btn-perp').classList.add('active');
+  perpStatus.style.display='block';
+  perpStatus.textContent='第1步：点击一个顶点...';
+}
+function exitPerp(){
+  perpMode=false;perpStep=0;perpPoint=null;
+  document.getElementById('btn-perp').classList.remove('active');
+  perpStatus.style.display='none';
+  if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+}
+
+document.getElementById('btn-perp').addEventListener('click',()=>{perpMode?exitPerp():enterPerp()});
+
+function findClosestEdge(mouse){
+  raycaster.setFromCamera(mouse,cam);
+  const ro=raycaster.ray.origin, rd=raycaster.ray.direction;
+  let bestDist=Infinity, bestEdge=null;
+  allEdges.forEach(([a,b])=>{
+    const pa=vtxPos[a], pb=vtxPos[b];
+    if(!pa||!pb)return;
+    const ee=new THREE.Vector3().subVectors(pb,pa);
+    const w0=new THREE.Vector3().subVectors(ro,pa);
+    const a2=rd.dot(rd),b2=rd.dot(ee),c2=ee.dot(ee),d2=rd.dot(w0),e2=ee.dot(w0);
+    const det=a2*c2-b2*b2;
+    if(Math.abs(det)<1e-8)return;
+    let sc=(b2*e2-c2*d2)/det;
+    let tc=(a2*e2-b2*d2)/det;
+    tc=Math.max(0,Math.min(1,tc));
+    const cp1=ro.clone().add(rd.clone().multiplyScalar(sc));
+    const cp2=pa.clone().add(ee.clone().multiplyScalar(tc));
+    const dist=cp1.distanceTo(cp2);
+    if(dist<bestDist&&dist<0.5){bestDist=dist;bestEdge=[a,b]}
+  });
+  return bestEdge;
+}
+
+function findPlaneHit(mouse){
+  raycaster.setFromCamera(mouse,cam);
+  const planeMeshes=[];
+  Object.keys(elems).forEach(id=>{
+    if(elems[id].type==='plane'&&elems[id].group.visible&&elems[id].mesh){
+      planeMeshes.push(elems[id].mesh);
+    }
+  });
+  const baseHits=raycaster.intersectObject(base,true).filter(h=>h.object.isMesh);
+  const planeHits=raycaster.intersectObjects(planeMeshes);
+  const allHits=[...planeHits,...baseHits];
+  if(allHits.length===0)return null;
+  const hitPt=allHits[0].point;
+  let bestPlane=null,bestD=Infinity;
+  allPlanes.forEach(pl=>{
+    const mx=hitPt.x, my=hitPt.z, mz=hitPt.y;
+    const dist=Math.abs(pl.nMath[0]*mx+pl.nMath[1]*my+pl.nMath[2]*mz-pl.d);
+    if(dist<bestD){bestD=dist;bestPlane=pl}
+  });
+  if(bestD<0.5)return bestPlane;
+  return null;
+}
+
+function drawPerpToEdge(ptName,edge){
+  const P=new THREE.Vector3(...V[ptName]);
+  const A=new THREE.Vector3(...V[edge[0]]);
+  const B=new THREE.Vector3(...V[edge[1]]);
+  const AB=new THREE.Vector3().subVectors(B,A);
+  const AP=new THREE.Vector3().subVectors(P,A);
+  const t=AP.dot(AB)/AB.dot(AB);
+  const foot=A.clone().add(AB.clone().multiplyScalar(t));
+  const footTjs=new THREE.Vector3(foot.x,foot.z,foot.y);
+  const pTjs=vtxPos[ptName];
+  const onSeg=(t>=-0.01&&t<=1.01);
+
+  auxGroup.add(mkDash(pTjs,footTjs,0xff8844,.1,.07));
+  auxGroup.add(mkDot(footTjs,0xff8844,.06));
+  const perpDir=new THREE.Vector3().subVectors(pTjs,footTjs).normalize();
+  const edgeDir=new THREE.Vector3().subVectors(vtxPos[edge[1]],vtxPos[edge[0]]).normalize();
+  auxGroup.add(mkRA(footTjs,edgeDir,perpDir,.2,0xff8844));
+  const dist=P.distanceTo(foot);
+  const distStr=Number.isInteger(dist)?''+dist:dist.toFixed(3);
+  const mid=pTjs.clone().add(footTjs).multiplyScalar(.5);
+  auxGroup.add(mkLbl('⊥'+distStr,mid.clone().add(new THREE.Vector3(.15,.15,0)),'#ff8844','10px'));
+  const footLabel=onSeg?(edge[0]+edge[1]+"'"):(edge[0]+edge[1]+'延长线');
+  auxGroup.add(mkLbl(footLabel,footTjs.clone().add(new THREE.Vector3(.15,-.2,0)),'#ff8844','10px'));
+  if(!onSeg){
+    const nearEnd=t<0?vtxPos[edge[0]]:vtxPos[edge[1]];
+    auxGroup.add(mkDash(nearEnd,footTjs,0x886644,.08,.06));
+  }
+  auxList.push({type:'perp-edge',from:ptName,edge});
+}
+
+function drawPerpToPlane(ptName,plane){
+  const P=V[ptName];
+  const n=plane.nMath;
+  const dot=n[0]*P[0]+n[1]*P[1]+n[2]*P[2];
+  const dist=dot-plane.d;
+  const foot=[P[0]-dist*n[0], P[1]-dist*n[1], P[2]-dist*n[2]];
+  const footTjs=new THREE.Vector3(foot[0],foot[2],foot[1]);
+  const pTjs=vtxPos[ptName];
+  const absDist=Math.abs(dist);
+
+  auxGroup.add(mkDash(pTjs,footTjs,0x44aaff,.1,.07));
+  auxGroup.add(mkDot(footTjs,0x44aaff,.07));
+
+  const nTjs=new THREE.Vector3(n[0],n[2],n[1]).normalize();
+  let inPlane=new THREE.Vector3(1,0,0);
+  if(Math.abs(nTjs.dot(inPlane))>0.9) inPlane=new THREE.Vector3(0,1,0);
+  inPlane.cross(nTjs).normalize();
+  auxGroup.add(mkRA(footTjs,inPlane,nTjs,.22,0x44aaff));
+
+  const distStr=Number.isInteger(absDist)?''+absDist:absDist.toFixed(3);
+  const mid=pTjs.clone().add(footTjs).multiplyScalar(.5);
+  auxGroup.add(mkLbl('⊥'+distStr,mid.clone().add(new THREE.Vector3(.15,.15,0)),'#44aaff','10px'));
+
+  auxGroup.add(mkLbl(ptName+"'(面"+plane.name+')',footTjs.clone().add(new THREE.Vector3(.2,-.2,0)),'#44aaff','10px'));
+
+  const plId='pl_'+plane.name;
+  if(elems[plId]&&!elems[plId].group.visible){
+    showEl(plId);
+  }
+
+  auxList.push({type:'perp-plane',from:ptName,plane:plane.name});
+}
+
+// Perpendicular click handler
+box.addEventListener('pointerdown',e=>{
+  if(!perpMode)return;
+  if(perpStep===0){
+    const hit=getVtxHit(e);
+    if(!hit)return;
+    perpPoint=hit.userData.vtx;
+    perpStep=1;
+    if(auxGlow){scene.remove(auxGlow);auxGlow=null}
+    auxGlow=mkDot(vtxPos[perpPoint],0xff8844,.15);scene.add(auxGlow);
+    perpStatus.textContent='起点: '+perpPoint+' → 第2步：点击一条边或一个面';
+    e.stopPropagation();
+  } else if(perpStep===1){
+    const mouse=getMouse(e);
+    e.stopPropagation();
+
+    const planeHit=findPlaneHit(mouse);
+    const edgeHit=findClosestEdge(mouse);
+
+    if(planeHit){
+      drawPerpToPlane(perpPoint,planeHit);
+      if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+      if(auxGlow){scene.remove(auxGlow);auxGlow=null}
+      perpStep=0;perpPoint=null;
+      perpStatus.textContent='已作垂线到面'+planeHit.name+' · 继续或退出';
+    } else if(edgeHit){
+      drawPerpToEdge(perpPoint,edgeHit);
+      if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+      if(auxGlow){scene.remove(auxGlow);auxGlow=null}
+      perpStep=0;perpPoint=null;
+      perpStatus.textContent='已作垂线到边 · 继续或退出';
+    } else {
+      perpStatus.textContent='未选中边或面，请重试';
+    }
+  }
+},{capture:true});
+
+// Preview on hover in perp mode step 2
+box.addEventListener('pointermove',e=>{
+  if(!perpMode||perpStep!==1)return;
+  if(auxPreview){scene.remove(auxPreview);auxPreview=null}
+  const mouse=getMouse(e);
+
+  const planeHit=findPlaneHit(mouse);
+  if(planeHit){
+    tooltip.style.display='block';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-20)+'px';
+    tooltip.textContent='面 '+planeHit.name+' (点击作垂线到面)';
+    box.style.cursor='crosshair';
+    return;
+  }
+
+  const edge=findClosestEdge(mouse);
+  if(edge){
+    const g=new THREE.BufferGeometry().setFromPoints([vtxPos[edge[0]],vtxPos[edge[1]]]);
+    auxPreview=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xff8844,linewidth:3}));
+    scene.add(auxPreview);
+    tooltip.style.display='block';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-20)+'px';
+    tooltip.textContent='边 '+edge[0]+edge[1]+' (点击作垂线到边)';
+    box.style.cursor='crosshair';
+  } else {
+    tooltip.style.display='none';
+    box.style.cursor='crosshair';
+  }
+});
+
+/* ===== TTS ENGINE ===== */
+let curAudio=null;
+let solveStepIdx=-1;
+
+const synth=window.speechSynthesis;
+let ttsVoice=null;
+function pickVoice(){const v=synth.getVoices();ttsVoice=v.find(x=>x.lang.startsWith('zh'))||v.find(x=>x.lang.startsWith('cmn'))||v[0]||null}
+pickVoice();if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=pickVoice;
+
+function speakFallback(text){
+  return new Promise(resolve=>{
+    if(!synth||!text){resolve();return}
+    synth.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='zh-CN';u.rate=0.9;u.pitch=1.0;
+    if(ttsVoice)u.voice=ttsVoice;
+    const safetyMs=Math.max(text.length*280,3000);
+    let done=false;
+    const timer=setTimeout(()=>{if(!done){done=true;resolve()}},safetyMs);
+    u.onend=()=>{if(!done){done=true;clearTimeout(timer);resolve()}};
+    u.onerror=()=>{if(!done){done=true;clearTimeout(timer);resolve()}};
+    synth.speak(u);
+  });
+}
+
+async function speak(text){
+  if(!text)return;
+  stopSpeak();
+  if(solveStepIdx>=0){
+    const audioUrl='audio/step_'+solveStepIdx+'.mp3?v=2';
+    try{
+      await new Promise((resolve,reject)=>{
+        curAudio=new Audio(audioUrl);
+        curAudio.onended=()=>{curAudio=null;resolve()};
+        curAudio.onerror=()=>{curAudio=null;reject(new Error('audio load failed'))};
+        curAudio.ontimeupdate=()=>{
+          if(curAudio&&solveStepIdx>=0){
+            const t=(stepStartTimes[solveStepIdx]||0)+curAudio.currentTime;
+            timeCurEl.textContent=fmtTime(t);
+          }
+        };
+        curAudio.play().catch(reject);
+      });
+      return;
+    }catch(e){
+      console.warn('Pre-gen audio fallback:',e);
+    }
+  }
+  await speakFallback(text);
+}
+
+function stopSpeak(){
+  if(curAudio){try{curAudio.pause();curAudio.currentTime=0}catch(e){}curAudio=null}
+  try{synth.cancel()}catch(e){}
+}
+
+/* ===== CAMERA HELPERS ===== */
+function camTo(phi,theta,dist,dur=1500){
+  return new Promise(resolve=>{
+    const start={x:cam.position.x,y:cam.position.y,z:cam.position.z};
+    const r=dist;
+    const tx=ctrl.target.x+r*Math.sin(phi)*Math.cos(theta);
+    const ty=ctrl.target.y+r*Math.cos(phi);
+    const tz=ctrl.target.z+r*Math.sin(phi)*Math.sin(theta);
+    const t0=performance.now();
+    function step(){
+      const p=Math.min(1,(performance.now()-t0)/dur);
+      const ease=p<.5?2*p*p:(1-Math.pow(-2*p+2,2)/2);
+      cam.position.set(start.x+(tx-start.x)*ease,start.y+(ty-start.y)*ease,start.z+(tz-start.z)*ease);
+      cam.lookAt(ctrl.target);
+      if(p<1) requestAnimationFrame(step); else resolve();
+    }
+    step();
+  });
+}
+let animTimer=null;
+function wait(ms){return new Promise(r=>{animTimer=setTimeout(r,ms)})}
+
+/* ===== SHOW/HIDE HELPERS ===== */
+function showEl(id){
+  if(!elems[id])return;
+  activeSet.add(id);
+  elems[id].group.visible=true;
+  setGroupLblVis(elems[id].group,true);
+  document.querySelectorAll(`.t[data-el="${id}"]`).forEach(s=>s.classList.add('on'));
+  updateDetail();
+}
+function flashSpan(elId){
+  document.querySelectorAll(`.t[data-el="${elId}"]`).forEach(s=>{
+    s.style.transition='background .2s';
+    s.style.background='rgba(100,200,255,0.3)';
+    setTimeout(()=>{s.style.background='';},800);
+    s.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+}
+function clearAll(){
+  const shownSticky=new Set();
+  activeSet.forEach(id=>{if(stickyEls.has(id))shownSticky.add(id)});
+  Object.keys(elems).forEach(id=>{
+    if(shownSticky.has(id))return;
+    elems[id].group.visible=false;
+    elems[id].group.position.set(0,0,0);
+    setGroupLblVis(elems[id].group,false);
+  });
+  activeSet.clear();
+  shownSticky.forEach(id=>activeSet.add(id));
+  document.querySelectorAll('.t.on').forEach(s=>s.classList.remove('on'));
+  updateDetail();
+}
+function hardClearAll(){
+  Object.keys(elems).forEach(id=>{
+    elems[id].group.visible=false;
+    elems[id].group.position.set(0,0,0);
+    setGroupLblVis(elems[id].group,false);
+  });
+  activeSet.clear();
+  document.querySelectorAll('.t.on').forEach(s=>s.classList.remove('on'));
+  updateDetail();
+}
+
+/* ===== SOLVE ENGINE ===== */
+let solveRunning=false;
+const solveBtn=document.getElementById('btn-solve');
+const animProgress=document.getElementById('anim-progress');
+const animBar=document.getElementById('anim-bar');
+
+const solScript=SD.solution_script || [];
+const total=solScript.length;
+
+function renderSolStep(stepIdx){
+  if(stepIdx<0||stepIdx>=total)return;
+  const s=solScript[stepIdx];
+  if(s.phase){
+    const ph=document.createElement('div');ph.className='sol-phase';ph.textContent=s.phase;
+    detailBody.appendChild(ph);
+  }
+  const card=document.createElement('div');card.className='sol-step';card.id='sol-'+stepIdx;
+  (s.math||[]).forEach(m=>{
+    const d=document.createElement('div');
+    if(m.type==='tex'){d.className='math-block';katex.render(m.v,d,{throwOnError:false,displayMode:true})}
+    else if(m.type==='result'){d.className='result';d.textContent=m.v}
+    else{d.className='desc';d.innerHTML=m.v}
+    card.appendChild(d);
+  });
+  detailBody.appendChild(card);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{card.classList.add('visible');card.classList.add('active')}));
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.querySelectorAll('.sol-step.active').forEach(el=>{if(el!==card)el.classList.remove('active')});
+}
+
+// Seekable Solve Engine
+let curStep=-1;
+const animThumb=document.getElementById('anim-thumb');
+const animTrack=document.getElementById('anim-track');
+const stepInfo=document.getElementById('step-info');
+const stepNav=document.getElementById('step-nav');
+const timeCurEl=document.getElementById('time-cur');
+const timeTotalEl=document.getElementById('time-total');
+
+const stepDurations=new Array(total).fill(3);
+let durationsLoaded=false;
+let solveStartTime=0;
+let stepStartTimes=[];
+
+function fmtTime(s){
+  s=Math.round(s);
+  const m=Math.floor(s/60);
+  const ss=s%60;
+  return m+':'+(ss<10?'0':'')+ss;
+}
+
+function computeStepStartTimes(){
+  stepStartTimes=[];
+  let t=0;
+  for(let i=0;i<total;i++){
+    stepStartTimes.push(t);
+    t+=stepDurations[i]+0.3;
+  }
+  stepStartTimes.push(t);
+}
+
+// Preload audio durations
+(async function preloadDurations(){
+  if(total===0)return;
+  const promises=[];
+  for(let i=0;i<total;i++){
+    promises.push(new Promise(res=>{
+      const a=new Audio('audio/step_'+i+'.mp3?v=2');
+      a.addEventListener('loadedmetadata',()=>{
+        if(a.duration&&isFinite(a.duration)) stepDurations[i]=a.duration;
+        res();
+      });
+      a.addEventListener('error',()=>res());
+      setTimeout(()=>res(),5000);
+    }));
+  }
+  await Promise.all(promises);
+  durationsLoaded=true;
+  computeStepStartTimes();
+  timeTotalEl.textContent=fmtTime(stepStartTimes[total]);
+})();
+computeStepStartTimes();
+if(total>0) timeTotalEl.textContent=fmtTime(stepStartTimes[total]);
+
+// Render all solution steps into detail panel on load
+(function initDetailPanel(){
+  if(total===0)return;
+  detailTitle.textContent='解题过程';
+  detailBody.innerHTML='';
+  for(let i=0;i<total;i++){
+    renderSolStep(i);
+  }
+  // Make all steps visible immediately
+  detailBody.querySelectorAll('.sol-step').forEach(el=>{el.classList.add('visible')});
+})();
+
+function updateProgress(idx){
+  if(total===0)return;
+  const pct=((idx+1)/total)*100;
+  animBar.style.width=pct+'%';
+  animThumb.style.left=pct+'%';
+  const s=solScript[idx];
+  const phase=s.phase||solScript.slice(0,idx+1).reverse().find(x=>x.phase)?.phase||'';
+  stepInfo.textContent=`${idx+1} / ${total}　${phase}`;
+  const elapsed=stepStartTimes[idx]||0;
+  timeCurEl.textContent=fmtTime(elapsed);
+}
+
+function applyStepState(targetIdx){
+  activeSet.clear();
+  Object.keys(elems).forEach(id=>{
+    elems[id].group.visible=false;
+    elems[id].group.position.set(0,0,0);
+    setGroupLblVis(elems[id].group,false);
+  });
+  detailBody.innerHTML='';
+
+  for(let i=0;i<=targetIdx;i++){
+    (solScript[i].els||[]).forEach(id=>{
+      if(stickyEls.has(id)) showEl(id);
+    });
+  }
+
+  const s=solScript[targetIdx];
+  (s.els||[]).forEach(id=>showEl(id));
+  for(let i=0;i<=targetIdx;i++){
+    renderSolStep(i);
+  }
+  for(let i=targetIdx;i>=0;i--){
+    if(solScript[i].cam){camTo(...solScript[i].cam);break;}
+  }
+  updateProgress(targetIdx);
+  curStep=targetIdx;
+}
+
+async function playStep(idx){
+  if(idx<0||idx>=total)return;
+  const s=solScript[idx];
+
+  if(s.clear) clearAll();
+
+  if(idx>0){
+    const prevEls=new Set(solScript[idx-1].els||[]);
+    const curEls=new Set(s.els||[]);
+    prevEls.forEach(id=>{
+      if(!curEls.has(id)&&elems[id]&&!stickyEls.has(id)){
+        elems[id].group.visible=false;
+        setGroupLblVis(elems[id].group,false);
+        activeSet.delete(id);
+        document.querySelectorAll(`.t[data-el="${id}"]`).forEach(sp=>sp.classList.remove('on'));
+      }
+    });
+  }
+
+  (s.els||[]).forEach(id=>{flashSpan(id)});
+  await wait(300);
+  (s.els||[]).forEach(id=>{showEl(id)});
+
+  const camP=s.cam?camTo(...s.cam):Promise.resolve();
+
+  renderSolStep(idx);
+
+  const matchSpans=[];
+  (s.els||[]).forEach(id=>{document.querySelectorAll(`.t[data-el="${id}"]`).forEach(sp=>{sp.classList.add('reading');matchSpans.push(sp)})});
+
+  updateProgress(idx);
+  curStep=idx;
+
+  solveStepIdx=idx;
+  await speak(s.speech);
+  solveStepIdx=-1;
+  await camP;
+
+  matchSpans.forEach(sp=>sp.classList.remove('reading'));
+  await wait(300);
+}
+
+async function runSolve(){
+  if(total===0)return;
+  solveRunning=true;
+  solveBtn.textContent='⏸ 暂停';solveBtn.classList.add('active');
+  animProgress.style.display='block';
+  stepNav.style.display='flex';
+  computeStepStartTimes();
+  timeTotalEl.textContent=fmtTime(stepStartTimes[total]);
+  timeCurEl.textContent='0:00';
+
+  const startFrom=(curStep>=0)?curStep:0;
+  if(startFrom===0) hardClearAll();
+  else clearAll();
+  detailEl.style.display='block';
+  detailTitle.textContent='解题过程';
+  if(startFrom===0){
+    detailBody.innerHTML='';
+  }
+
+  try{
+    for(let i=startFrom;i<total;i++){
+      if(!solveRunning)break;
+      await playStep(i);
+    }
+  }catch(e){}
+
+  solveRunning=false;
+  stopSpeak();
+  hardClearAll();
+  solveBtn.textContent='▶ 讲解演示';solveBtn.classList.remove('active');
+  document.querySelectorAll('.t.reading').forEach(s=>s.classList.remove('reading'));
+}
+
+/* ===== SEEK SYSTEM ===== */
+function seekToFraction(frac){
+  if(total===0)return;
+  const idx=Math.min(total-1,Math.max(0,Math.round(frac*(total-1))));
+  if(solveRunning){solveRunning=false;stopSpeak();if(animTimer)clearTimeout(animTimer);}
+  solveBtn.textContent='▶ 讲解演示';solveBtn.classList.remove('active');
+  document.querySelectorAll('.t.reading').forEach(s=>s.classList.remove('reading'));
+  detailEl.style.display='block';
+  detailTitle.textContent='解题过程';
+  applyStepState(idx);
+  solveStepIdx=idx;
+  speak(solScript[idx].speech).then(()=>{solveStepIdx=-1;});
+}
+
+// Click on track
+animTrack.addEventListener('click',(e)=>{
+  const rect=animTrack.getBoundingClientRect();
+  const frac=(e.clientX-rect.left)/rect.width;
+  seekToFraction(frac);
+});
+
+// Drag thumb
+let draggingThumb=false;
+animThumb.addEventListener('mousedown',(e)=>{draggingThumb=true;e.preventDefault()});
+addEventListener('mousemove',(e)=>{
+  if(!draggingThumb)return;
+  const rect=animTrack.getBoundingClientRect();
+  const frac=Math.min(1,Math.max(0,(e.clientX-rect.left)/rect.width));
+  const idx=Math.min(total-1,Math.max(0,Math.round(frac*(total-1))));
+  updateProgress(idx);
+});
+addEventListener('mouseup',(e)=>{
+  if(!draggingThumb)return;
+  draggingThumb=false;
+  const rect=animTrack.getBoundingClientRect();
+  const frac=Math.min(1,Math.max(0,(e.clientX-rect.left)/rect.width));
+  seekToFraction(frac);
+});
+
+// Touch support
+animThumb.addEventListener('touchstart',(e)=>{draggingThumb=true;e.preventDefault()},{passive:false});
+addEventListener('touchmove',(e)=>{
+  if(!draggingThumb)return;
+  const t=e.touches[0];
+  const rect=animTrack.getBoundingClientRect();
+  const frac=Math.min(1,Math.max(0,(t.clientX-rect.left)/rect.width));
+  const idx=Math.min(total-1,Math.max(0,Math.round(frac*(total-1))));
+  updateProgress(idx);
+},{passive:false});
+addEventListener('touchend',(e)=>{
+  if(!draggingThumb)return;
+  draggingThumb=false;
+  const t=e.changedTouches[0];
+  const rect=animTrack.getBoundingClientRect();
+  const frac=Math.min(1,Math.max(0,(t.clientX-rect.left)/rect.width));
+  seekToFraction(frac);
+});
+
+/* ===== CONTROLS ===== */
+// Prev / Next buttons
+document.getElementById('btn-prev').addEventListener('click',()=>{
+  if(total>0&&curStep>0) seekToFraction((curStep-1)/(total-1));
+});
+document.getElementById('btn-next').addEventListener('click',()=>{
+  if(total>0&&curStep<total-1) seekToFraction((curStep+1)/(total-1));
+});
+
+solveBtn.addEventListener('click',()=>{
+  if(solveRunning){
+    solveRunning=false;
+    stopSpeak();
+    if(animTimer)clearTimeout(animTimer);
+    solveBtn.textContent='▶ 讲解演示';solveBtn.classList.remove('active');
+    document.querySelectorAll('.t.reading').forEach(s=>s.classList.remove('reading'));
+  } else {
+    runSolve();
+  }
+});
+
+document.getElementById('btn-reset').addEventListener('click',()=>{
+  if(solveRunning){solveRunning=false;stopSpeak();if(animTimer)clearTimeout(animTimer)}
+  solveBtn.textContent='▶ 讲解演示';solveBtn.classList.remove('active');
+  animProgress.style.display='none';stepNav.style.display='none';
+  animBar.style.width='0%';animThumb.style.left='0%';
+  curStep=-1;
+  hardClearAll();
+  // Re-render all steps in detail panel after reset
+  detailTitle.textContent='解题过程';
+  detailBody.innerHTML='';
+  for(let i=0;i<total;i++){renderSolStep(i)}
+  detailBody.querySelectorAll('.sol-step').forEach(el=>el.classList.add('visible'));
+  document.querySelectorAll('.t.reading').forEach(s=>s.classList.remove('reading'));
+  cam.position.set(...initCam.position);cam.lookAt(...initCam.target);ctrl.update();
+});
+
+/* ===== RESIZE + RENDER ===== */
+addEventListener('resize',()=>{
+  cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+  ren.setSize(innerWidth,innerHeight);lRen.setSize(innerWidth,innerHeight);
+});
+
+(function anim(){requestAnimationFrame(anim);ctrl.update();ren.render(scene,cam);lRen.render(scene,cam)})();
+</script>
+</body>
+</html>

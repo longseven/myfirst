@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "预录制教学视频索引库",
+    "updated": "2025-04-01"
+  },
+  "videos": [
+    {
+      "id": "example_001",
+      "title": "示例：高考冲刺·函数综合题",
+      "subject": "高考冲刺综合",
+      "type": "综合题",
+      "methods": ["分类讨论", "数形结合"],
+      "tags": ["函数", "导数", "零点", "分类讨论", "高考真题"],
+      "difficulty": "拔高",
+      "url": "videos/example_001.mp4",
+      "duration": "15:30",
+      "timestamps": [
+        {"time": "0:00", "label": "审题"},
+        {"time": "2:15", "label": "分析函数性质"},
+        {"time": "5:30", "label": "分类讨论"},
+        {"time": "10:00", "label": "求解"},
+        {"time": "13:45", "label": "总结"}
+      ],
+      "source": "2024全国甲卷"
+    }
+  ]
+}
